@@ -73,7 +73,11 @@
         <!-- Layout wrapper -->
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
+<<<<<<< HEAD
                 <x-sidebar />
+=======
+
+>>>>>>> 208018b888d8c2143aa7395ae46cf8dc9b21c7e8
 
                 <!-- Layout container -->
                 <div class="layout-page">
