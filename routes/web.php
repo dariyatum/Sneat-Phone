@@ -62,9 +62,6 @@ Route::group([
       Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
     Route::resource('roles', RoleController::class);
-<<<<<<< HEAD
-    Route::resource('products', ProductController::class);
-=======
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
@@ -72,7 +69,6 @@ Route::group([
     Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
     Route::post('/products/update/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
->>>>>>> 208018b888d8c2143aa7395ae46cf8dc9b21c7e8
     Route::group(['prefix'=>'user','as'=>'users.'], function(){
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
@@ -88,7 +84,6 @@ Route::group([
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
     });
-<<<<<<< HEAD
     
 
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
@@ -96,12 +91,6 @@ Route::group([
       Route::get('/create', [OrderController::class, 'create'])->name('create');
     });
     
-=======
-    Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
-      Route::get('/', [OrderController::class, 'index'])->name('index');
-     
-    });
->>>>>>> 208018b888d8c2143aa7395ae46cf8dc9b21c7e8
     Route::group(['prefix'=>'cart','as'=>'carts.'], function(){
       Route::post('/store', [CartController::class, 'store'])->name('store');
       Route::delete('/destroy', [CartController::class, 'destroy'])->name('destroy');
