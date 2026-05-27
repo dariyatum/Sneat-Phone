@@ -83,6 +83,8 @@ Route::group([
     });
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
+      Route::get('/create', [OrderController::class, 'create'])->name('create');
+
     });
     
 

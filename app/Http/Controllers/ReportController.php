@@ -863,7 +863,7 @@ class ReportController extends Controller
 
         $totalOrderAmount = $query->sum('total_amount');
         $totalLoanPaymentIncome = $loanPaymentQuery->sum('amount');
-        $loanPhoneProfit = $loanQuery->sum('phone_profit');
+        $loanPhoneProfit = $loanQuery->sum('amount_interest');
         $totalExpense = $expenseQuery->sum('amount');
         $totalProfit = ($totalLoanPaymentIncome + $totalOrderAmount + $loanPhoneProfit) - $totalExpense;
 
@@ -875,7 +875,7 @@ class ReportController extends Controller
         'totalOrderAmount',
         'loanPhoneProfit',
         'totalProfit',
-        'years'
+        'years',
         ));
     }
 
