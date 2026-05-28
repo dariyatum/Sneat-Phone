@@ -727,7 +727,7 @@ class ReportController extends Controller
         $availableProducts = Product::available()->get();
         $statusOptions = Loan::STATUS;
         $currentNow = Carbon::now();
-        $dueDate = \Carbon\Carbon::parse($loan->date ?? '')->addMonth(1);
+        $dueDate = \Carbon\Carbon::parse($loan->date ?? '')->addMonths(1);
         $currentDate = $currentNow->format('Y-m-d');
 
 
