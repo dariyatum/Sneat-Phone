@@ -32,6 +32,15 @@ class LoanController extends Controller
     public function index(Request $request)
     {
         $query = Loan::query();
+            // The bug is here
+        $loans = $query->latest()->paginate(10);
+    
+        $customers = Customer::pluck('name', 'id');
+        
+        $parameterNames = [];
+
+        return view('loans.index', compact('loans', 'customers', 'parameterNames'));
+
     }
 
     /**
