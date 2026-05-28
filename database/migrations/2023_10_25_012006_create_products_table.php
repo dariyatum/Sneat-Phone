@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('model_type_id')->references('id')->on('model_types')->cascadeOnDelete()->comment('model_types.id');
             $table->integer('condition')->default(1)->comment('1:Used, 2:New');
             $table->foreignId('storage_id')->references('id')->on('storages')->cascadeOnDelete()->comment('storages.id');
-            $table->integer('type_of_machine')->default(1)->comment('1:iCloud, 2:Unlock, 2:Original');
+            $table->integer('type_of_machine')->default(1)->comment('1:iCloud, 2:Unlock, 3:Original');
             $table->foreignId('network_id')->default(0)->nullable()->references('id')->on('networks')->cascadeOnDelete()->comment('networks.id');
             $table->string('battery_percentage')->nullable();
             $table->string('percentage')->nullable();
