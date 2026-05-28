@@ -47,6 +47,7 @@
                                     <div class="card-body">
                                     <!-- Logo -->
                                         <div class="app-brand justify-content-center">
+                                   
                                             <img src="{{ $company->logo }}" alt="logo" width="100px"/>
                                         </div>
                                     <!-- /Logo -->

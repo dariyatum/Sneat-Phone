@@ -22,7 +22,7 @@ use App\Http\Controllers\StorageController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
-
+use App\Http\Controllers\GurantorController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -94,6 +94,8 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
     });
+    
+
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
 
     Route::get('/', [OrderController::class, 'index'])
