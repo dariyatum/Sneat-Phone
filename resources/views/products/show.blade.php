@@ -21,23 +21,50 @@
 
                 <div class="product-info">
 
-                    <p><span>PRODUCT NAME :</span> {{ $product->product_name }}</p>
+                    <p>
+                        <span>PRODUCT NAME :</span>
+                        {{ $product->product_name }}
+                    </p>
 
-                    <p><span>PRODUCT CODE :</span> {{ $product->product_code }}</p>
+                    <p>
+                        <span>PRODUCT CODE :</span>
+                        {{ $product->product_code }}
+                    </p>
 
-                    <p><span>BRAND :</span> {{ $product->brand->name ?? '' }}</p>
+                    <p>
+                        <span>BRAND :</span>
+                        {{ $product->brand->name ?? '' }}
+                    </p>
 
-                    <p><span>COLOR :</span> {{ $product->color->name ?? '' }}</p>
+                    <p>
+                        <span>COLOR :</span>
+                        {{ $product->color->name ?? '' }}
+                    </p>
 
-                    <p><span>STORAGE :</span> {{ $product->storage->name ?? '' }}</p>
+                    <p>
+                        <span>STORAGE :</span>
+                        {{ $product->storage->name ?? '' }}
+                    </p>
 
-                    <p><span>BATTERY PERCENTAGE :</span> {{ $product->battery_percentage }}</p>
+                    <p>
+                        <span>BATTERY PERCENTAGE :</span>
+                        {{ $product->battery_percentage }}
+                    </p>
 
-                    <p><span>PURCHASE DATE :</span> {{ $product->purchase_date }}</p>
+                    <p>
+                        <span>PURCHASE DATE :</span>
+                        {{ $product->purchase_date }}
+                    </p>
 
-                    <p><span>SELLING PRICE :</span> ${{ $product->selling_price }}</p>
+                    <p>
+                        <span>SELLING PRICE :</span>
+                        ${{ $product->selling_price }}
+                    </p>
 
-                    <p><span>PRODUCT NOTE :</span> {{ $product->note }}</p>
+                    <p>
+                        <span>PRODUCT NOTE :</span>
+                        {{ $product->note }}
+                    </p>
 
                 </div>
             </div>
@@ -47,33 +74,91 @@
 
                 <div class="product-info mt-md-5">
 
-                    <p><span>PRODUCT IMEI :</span> {{ $product->product_imei }}</p>
-                    @if($product->condition == 1)
-                    <p><span>CONDITION :</span> Used</p>
-                    @elseif($product->condition == 2)
-                    <p><span>CONDITION :</span> New</p>
-                    @endif
-                    <p><span>SERIES :</span> {{ $product->series->name ?? '' }}</p>
+                    <p>
+                        <span>PRODUCT IMEI :</span>
+                        {{ $product->product_imei }}
+                    </p>
 
-                    <p><span>MODEL :</span> {{ $product->modelType->name ?? '' }}</p>
-                    @if($product->modelType->name == 1)
-                    <p><span>TYPE OF MACHINE :</span>iCloud</p>
-                    @elseif($product->modelType-> == 2)
-                    <p><span>TYPE OF MACHINE :</span>Unlock</p>
-                    @elseif($product->modelType-> == 3)
-                    <p><span>TYPE OF MACHINE :</span>Original</p>
+                    {{-- CONDITION --}}
+                    <p>
+                        <span>CONDITION :</span>
 
+                        @if($product->condition == 1)
+                            <span class="badge bg-primary">Used</span>
 
+                        @elseif($product->condition == 2)
+                            <span class="badge bg-secondary">New</span>
 
-                    <p><span>PRODUCT PERCENTAGE :</span> {{ $product->percentage }}</p>
+                        @elseif($product->condition == 3)
+                            <span class="badge bg-success">Refurbished</span>
 
-                    <p><span>PURCHASE PRICE :</span> ${{ $product->purchase_price }}</p>
+                        @else
+                            <span class="badge bg-dark">Unknown</span>
+                        @endif
+                    </p>
 
                     <p>
+                        <span>SERIES :</span>
+                        {{ $product->series->name ?? '' }}
+                    </p>
+
+                    <p>
+                        <span>MODEL :</span>
+                        {{ $product->modelType->name ?? '' }}
+                    </p>
+
+                    {{-- TYPE OF MACHINE --}}
+                    <p>
+                        <span>TYPE OF MACHINE :</span>
+
+                        @if($product->type_of_machine == 1)
+                            <span class="badge bg-info">iCloud</span>
+
+                        @elseif($product->type_of_machine == 2)
+                            <span class="badge bg-warning">Unlock</span>
+
+                        @elseif($product->type_of_machine == 3)
+                            <span class="badge bg-dark">Original</span>
+
+                        @else
+                            <span class="badge bg-secondary">Unknown</span>
+                        @endif
+                    </p>
+
+                    <p>
+                        <span>PRODUCT PERCENTAGE :</span>
+                        {{ $product->percentage }}
+                    </p>
+
+                    <p>
+                        <span>PURCHASE PRICE :</span>
+                        ${{ $product->purchase_price }}
+                    </p>
+
+                    {{-- STATUS --}}
+                    <p>
                         <span>PRODUCT STATUS :</span>
-                        <span class="badge bg-success px-3 py-2 rounded-pill">
-                            {{ $product->status }}
-                        </span>
+
+                        @if($product->status == 1)
+                            <span class="badge bg-success px-3 py-2 rounded-pill">
+                                Available
+                            </span>
+
+                        @elseif($product->status == 2)
+                            <span class="badge bg-danger px-3 py-2 rounded-pill">
+                                Sold
+                            </span>
+
+                        @elseif($product->status == 3)
+                            <span class="badge bg-warning px-3 py-2 rounded-pill">
+                                Pending
+                            </span>
+
+                        @else
+                            <span class="badge bg-dark px-3 py-2 rounded-pill">
+                                Unknown
+                            </span>
+                        @endif
                     </p>
 
                 </div>

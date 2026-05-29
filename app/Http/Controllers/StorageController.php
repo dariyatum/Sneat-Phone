@@ -12,81 +12,70 @@ class StorageController extends Controller
      */
     public function index()
     {
-        //
-        $storages = storage::withCount([
-          'products',
-          'products as products_status_instock_count' => function ($query) {
-              $query->where('status', 1);
-          },
-          'products as products_status_sold_count' => function ($query) {
-              $query->where('status', 2);
-          },
-          'products as products_status_loan_count' => function ($query) {
-              $query->where('status', 3);
-          },
+        $storages = Storage::withCount([
+            'products',
+
+            'products as products_status_instock_count' => function ($query) {
+                $query->where('status', 1);
+            },
+
+            'products as products_status_sold_count' => function ($query) {
+                $query->where('status', 2);
+            },
+
+            'products as products_status_loan_count' => function ($query) {
+                $query->where('status', 3);
+            },
+
         ])->get();
-        return view('storages.index', ['storages' => $storages]);
+
+        return view('storages.index', [
+            'storages' => $storages
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store new storage
      */
     public function store(Request $request)
     {
-        //
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:25|unique:storages,name',
         ]);
-        $storage = new storage();
+
+        $storage = new Storage();
+
         $storage->name = $request->name;
+
         $storage->save();
+
         return redirect()->route('storage.index', withLang());
     }
 
     /**
-     * Display the specified resource.
+     * Update storage
      */
-    public function show(Storage $storage)
-    {
-        //
-    }
+public function update(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:25|unique:storages,name,' . $request->id . ',id',
+    ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Storage $storage)
-    {
-        //
-    }
+    $storage = Storage::findOrFail($request->id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Storage $storage)
-    {
-        //
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:25|unique:storages,name',
-        ]);
-        $storage = new storage();
-        $storage->name = $request->name;
-        $storage->save();
-        return redirect()->route('storage.index', withLang());
-    }
+    $storage->name = $request->name;
 
+    $storage->save();
+
+    return redirect()->route('storage.index', withLang());
+}
     /**
-     * Remove the specified resource from storage.
+     * Delete storage
      */
     public function destroy(Storage $storage)
     {
-        //
+        $storage->delete();
+
+        return redirect()->route('storage.index', withLang());
     }
 }
