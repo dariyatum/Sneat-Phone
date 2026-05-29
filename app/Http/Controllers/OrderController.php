@@ -19,6 +19,22 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
+
+// public function create()
+// {
+//     return view('orders.create');
+// }
+
+
+public function create()
+{
+    $products = Product::all();
+
+    return view('orders.create', compact('products'));
+}
+
+
+
   function __construct()
   {
       $this->middleware('auth');

@@ -86,6 +86,8 @@ Route::group([
     });
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
+      Route::get('create', [OrderController::class, 'create'])->name('create');    // ✅ add this
+
      
     });
     Route::group(['prefix'=>'cart','as'=>'carts.'], function(){
@@ -157,14 +159,14 @@ Route::group([
       Route::get('{loan}/agreement/', [LoanController::class, 'agreement'])->name('agreement');
       Route::group(['prefix'=>'payment','as'=>'payments.'], function(){
         Route::get('/', [LoanPaymentController::class, 'index'])->name('index');
-        Route::get('/create', [LoanPaymentController::class, 'create'])->name('create');
+        Route::get('/create', [LoanPaymentController::class, 'create'])->name('create');                                                                                                                                                      
         Route::post('/', [LoanPaymentController::class, 'store'])->name('store');
         Route::get('/{loanPayment}/edit', [LoanPaymentController::class, 'edit'])->name('edit');
         Route::get('/{loanPayment}/invoice', [LoanPaymentController::class, 'invoice'])->name('invoice');
         Route::get('/{loanPayment}/invoice/pdf', [LoanPaymentController::class, 'invoicePdf'])->name('invoice.pdf');
         Route::put('/{loanPayment}', [LoanPaymentController::class, 'update'])->name('update');
         Route::delete('/{loanPayment}', [LoanPaymentController::class, 'destroy'])->name('destroy');
-        Route::get('{loan}/list', [LoanController::class, 'list'])->name('list');
+        Route::get('{loan}/list', [LoanController::class, 'list'])->name('list');                                                                                                                                             
         Route::get('/{loan}/pdf', [LoanController::class,'pdf'])->name('pdf');
         Route::get('/late', [LoanPaymentController::class, 'late'])->name('late');
       });
@@ -194,3 +196,15 @@ Route::group([
     Route::put('company/', [CompanySettingController::class, 'update'])->name('company.update');
 });
 
+// for sidebar
+Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+
+
+// for order
+Route::get('{lang}/orders/create', [OrderController::class, 'create'])
+    ->name('orders.create');
+
+Route::get('{lang}/orders/create', [OrderController::class, 'create'])
+    ->name('orders.create');
+
+Route::post('/orders/store', [OrderController::class, 'store']) ->name('orders.store');
