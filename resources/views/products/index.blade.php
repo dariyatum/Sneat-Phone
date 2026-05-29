@@ -60,9 +60,9 @@
                   <div class="text-end">
                   <span class="text-end">
                       @can('product-list')
-                      <a href="{{ route('products.show', withLang(['product' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
-                          <span class="tf-icons bx bx-detail"></span>
-                      </a>
+                 <a href="{{ route('products.show', withLang(['id' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
+                    <span class="tf-icons bx bx-detail"></span>
+                </a>
                       @endcan
                       @can('product-edit')
                         <a href="{{ route('products.edit', withLang(['product' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
@@ -138,15 +138,44 @@
                               <td>{{ $product->color->name ?? ''}}</td>
                               <td>{{ $product->modelType->name ?? ''}}</td>
                               <td>{{ $product->storage->name ?? '' }}</td>
-                              <td>{!! $product->condition_label_badges_name ?? ''!!}</td>
-                              <td>{{ $product->network->name ?? '' }}</td>
-                              <td>{!! $product->status_badges_name ?? ''!!}</td>
+                                <td>
+                                    @if($product->condition == 1)
+                                        <span class="badge bg-primary">Used</span>
+
+                                    @elseif($product->condition == 2)
+                                        <span class="badge bg-secondary">New</span>
+                                    @endif
+                                </td>
+                          <td>
+                                @if($product->type_of_machine == 1)
+                                    <span class="badge bg-info">iCloud</span>
+
+                                @elseif($product->type_of_machine == 2)
+                                    <span class="badge bg-warning">Unlock</span>
+
+                                @elseif($product->type_of_machine == 3)
+                                    <span class="badge bg-dark">Original</span>
+                                @endif
+                            </td>
+                              <td>
+                            @if($product->status == 1)
+                                <span class="badge bg-success">Available</span>
+
+                            @elseif($product->status == 2)
+                                <span class="badge bg-danger">Sold</span>
+
+                            @elseif($product->status == 3)
+                                <span class="badge bg-warning">Reserved</span>
+                            @elseif($product->status == 4)
+                                <span class="badge bg-warning">Pre-order</span>
+                            @endif
+                        </td>
 
                               <td>
                                   @can('product-list')
-                                  <a href="{{ route('products.show', withLang(['product' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
-                                      <span class="tf-icons bx bx-detail"></span>
-                                  </a>
+                                 <a href="{{ route('products.show', withLang(['id' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
+                                    <span class="tf-icons bx bx-detail"></span>
+                                </a>
                                   @endcan
                                   @can('product-edit')
                                   <a href="{{ route('products.edit', withLang(['product' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">

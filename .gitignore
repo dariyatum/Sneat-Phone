@@ -67,4 +67,8 @@ yarn-error.log
 /public/fonts
 .composer.lock
 yarn.lock
+<<<<<<< HEAD
+>>>>>>> ea45503 (First commit)
+=======
 >>>>>>> 32f9540 (first commit)
+>>>>>>> 208018b888d8c2143aa7395ae46cf8dc9b21c7e8

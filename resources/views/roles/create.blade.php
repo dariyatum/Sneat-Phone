@@ -30,22 +30,72 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label class="form-label" for="basic-default-fullname">Permission</label>
-                                    <br/>
-                                    @foreach($permission as $value)
-                                        <input class="form-check-input @error('permission') is-invalid @enderror" type="checkbox" name="permission[]" id="permission-{{ $value->id }}" value="{{ $value->id }}">
-                                        <label for="permission-{{ $value->id }}">{{ $value->name }}</label>
-                                        <br/>
-                                    @endforeach
-                                    @error('permission')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                        <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
+                <div class="form-group">
+
+                    <label class="form-label">Permission</label>
+                    <br/>
+
+                    @php
+                        $groups = [];
+
+                        foreach($permission as $perm){
+
+                            // split permission name
+                            // example: user-view
+                            $parts = explode('-', $perm->name);
+
+                            $group = ucfirst($parts[0]);
+
+                            $groups[$group][] = $perm;
+                        }
+                    @endphp
+
+                    @foreach($groups as $groupName => $permissions)
+
+                        {{-- Parent Checkbox --}}
+                        <div class="mb-2 mt-3">
+                            <input 
+                                type="checkbox"
+                                class="form-check-input parent-checkbox"
+                                id="group-{{ $groupName }}"
+                                data-group="{{ $groupName }}"
+                            >
+
+                            <label class="fw-bold" for="group-{{ $groupName }}">
+                                {{ $groupName }}
+                            </label>
+                        </div>
+
+                        {{-- Child Permissions --}}
+                        <div class="ms-4">
+
+                            @foreach($permissions as $value)
+
+                                <div class="mb-1">
+
+                                    <input 
+                                        class="form-check-input child-checkbox group-{{ $groupName }}"
+                                        type="checkbox"
+                                        name="permission[]"
+                                        id="permission-{{ $value->id }}"
+                                        value="{{ $value->id }}"
+                                    >
+
+                                    <label for="permission-{{ $value->id }}">
+                                        {{ $value->name }}
+                                    </label>
+
                                 </div>
-                            </div>
+
+                            @endforeach
+
+                        </div>
+
+                    @endforeach
+
+                </div>
+</div>
                             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                                 <button type="submit" class="btn btn-primary">
                                     Submit
@@ -62,9 +112,16 @@
 
 @endsection
 @push('script')
-    <script>
-        function submitForm(){
-            $('.submit-delete').click();
-        }
-    </script>
+<script>
+
+    // Parent checkbox click
+    $('.parent-checkbox').on('change', function(){
+
+        let group = $(this).data('group');
+
+        $('.group-' + group).prop('checked', $(this).prop('checked'));
+
+    });
+
+</script>
 @endpush

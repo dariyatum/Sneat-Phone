@@ -72,6 +72,8 @@ class Product extends Model
 
     protected $dates = ['purchase_date', 'deleted_at'];
 
+    protected $table = 'products';
+
     public function brand()
     {
         return $this->belongsTo(Brand::class);
@@ -107,46 +109,53 @@ class Product extends Model
         return $this->belongsTo(Network::class);
     }
 
-    public function getConditionNameAttribute()
-    {
-      return self::CONDITION[$this->condition];
+public function getConditionNameAttribute()
+{
+    return self::CONDITION[$this->condition] ?? 'Unknown';
+}
+
+public function getTypeOfMachineNameAttribute()
+{
+    return self::TYPE_OF_MACHINE[$this->type_of_machine] ?? 'Unknown';
+}
+
+public function getStatusNameAttribute(): string
+{
+    $getStatus = self::getStatuses();
+
+    return $getStatus[$this->status] ?? 'Unknown';
+}
+
+public function getConditionLabelBadgesNameAttribute()
+{
+    $conditionName = self::CONDITION[$this->condition] ?? 'Unknown';
+
+    if ($this->condition == self::CONDITION_USED) {
+        return '<span class="badge bg-label-primary">' . $conditionName . '</span>';
     }
 
-    public function getTypeOfMachineNameAttribute()
-    {
-      return self::TYPE_OF_MACHINE[$this->type_of_machine];
+    return '<span class="badge bg-label-secondary">' . $conditionName . '</span>';
+}
+
+public function getStatusBadgesNameAttribute()
+{
+    $getStatus = self::getStatuses();
+
+    if ($this->status == self::STATUS_ID_AVAILABLE) {
+        return '<span class="badge bg-primary">' . ($getStatus[$this->status] ?? 'Unknown') . '</span>';
+
+    } elseif ($this->status == self::STATUS_ID_SOLD) {
+        return '<span class="badge bg-danger">' . ($getStatus[$this->status] ?? 'Unknown') . '</span>';
+
+    } elseif ($this->status == self::STATUS_ID_LOAN) {
+        return '<span class="badge bg-secondary">' . ($getStatus[$this->status] ?? 'Unknown') . '</span>';
+
+    } elseif ($this->status == self::STATUS_ID_BROKEN) {
+        return '<span class="badge bg-warning">' . ($getStatus[$this->status] ?? 'Unknown') . '</span>';
     }
 
-    public function getStatusNameAttribute(): string
-    {
-      $getStatus = self::getStatuses();
-      return $getStatus[$this->status];
-    }
-
-    public function getConditionLabelBadgesNameAttribute()
-    {
-      if($this->condition == self::CONDITION_USED){
-        return '<span class="badge bg-label-primary">'.self::CONDITION[$this->condition].'</span>';
-      }else{
-        return '<span class="badge bg-label-secondary">'.self::CONDITION[$this->condition].'</span>';
-      }
-    }
-
-    public function getStatusBadgesNameAttribute()
-    {
-      $getStatus = self::getStatuses();
-      if($this->status == self::STATUS_ID_AVAILABLE){
-        return '<span class="badge bg-primary">'.$getStatus[$this->status].'</span>';
-      }elseif($this->status == self::STATUS_ID_SOLD){
-        return '<span class="badge bg-danger">'.$getStatus[$this->status].'</span>';
-      }elseif($this->status == self::STATUS_ID_LOAN){
-        return '<span class="badge bg-secondary">'.$getStatus[$this->status].'</span>';
-      }elseif($this->status == self::STATUS_ID_BROKEN){
-        return '<span class="badge bg-warning">'.$getStatus[$this->status].'</span>';
-      }
-      return  '<span class="badge bg-primary">'.$getStatus[$this->status].'</span>';
-    }
-
+    return '<span class="badge bg-dark">Unknown</span>';
+}
     public function getImageNameAttribute()
     {
       if($this->image && $this->image != null && $this->image != ''){

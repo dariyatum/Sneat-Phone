@@ -2,7 +2,7 @@
 <footer class="footer bg-light">
     <div class="container-fluid d-flex flex-md-row flex-column justify-content-between align-items-md-center gap-1 container-p-x py-3">
         <div>
-        ©2023　,
+        ©2090　,
             <a href="#" target="_blank" class="footer-link fw-bolder">Management System - MS</a>
         </div>
         <div>
