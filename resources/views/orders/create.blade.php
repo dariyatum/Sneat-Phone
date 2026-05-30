@@ -44,7 +44,7 @@
                                placeholder="Search product...">
                     </div>
 
-                    {{-- Table --}}
+                    {{-- Products Table --}}
                     <div class="table-responsive"
                          style="max-height:60vh; overflow-y:auto;">
 
@@ -52,67 +52,69 @@
                                id="productsTable">
 
                             <thead class="table-light sticky-top">
-                            <tr>
-                                <th>Product</th>
-                                <th>IMEI</th>
-                                <th>Color</th>
-                                <th>Storage</th>
-                                <th class="text-end">Price</th>
-                                <th class="text-center">Action</th>
-                            </tr>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>IMEI</th>
+                                    <th>Color</th>
+                                    <th>Storage</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
 
-                            @forelse($products ?? [] as $product)
-                            <tr>
+                                @forelse($products ?? [] as $product)
+                                <tr>
 
-                                <td>{{ $product->product_name }}</td>
+                                    <td>
+                                        {{ $product->product_name }}
+                                    </td>
 
-                                <td>
-                                    <code>
-                                        {{ $product->product_imei }}
-                                    </code>
-                                </td>
+                                    <td>
+                                        <code>
+                                            {{ $product->product_imei }}
+                                        </code>
+                                    </td>
 
-                                <td>{{ $product->color }}</td>
+                                    <td>
+                                        {{ $product->color->name ?? '-' }}
+                                    </td>
 
-                                <td>{{ $product->storage }}</td>
+                                    <td>
+                                        {{ $product->storage->name ?? '-' }}
+                                    </td>
 
-                                <td class="text-end text-success fw-bold">
-                                    ${{ number_format($product->selling_price ?? 0,2) }}
-                                </td>
+                                    <td class="text-end text-success fw-bold">
+                                        ${{ number_format($product->selling_price ?? 0, 2) }}
+                                    </td>
 
-                                <td class="text-center">
+                                    <td class="text-center">
+                                        <button type="button"
+                                                class="btn btn-sm btn-primary add-to-cart"
+                                                data-id="{{ $product->id }}"
+                                                data-name="{{ $product->product_name }}"
+                                                data-imei="{{ $product->product_imei }}"
+                                                data-color="{{ $product->color->name ?? '' }}"
+                                                data-storage="{{ $product->storage->name ?? '' }}"
+                                                data-price="{{ $product->selling_price ?? 0 }}">
+                                            Add
+                                        </button>
+                                    </td>
 
-                                    <button type="button"
-                                            class="btn btn-sm btn-primary add-to-cart"
+                                </tr>
+                                @empty
 
-                                            data-id="{{ $product->id }}"
-                                            data-name="{{ $product->product_name }}"
-                                            data-imei="{{ $product->product_imei }}"
-                                            data-color="{{ $product->color }}"
-                                            data-storage="{{ $product->storage }}"
-                                            data-price="{{ $product->selling_price ?? 0 }}">
-                                        Add
-                                    </button>
+                                <tr>
+                                    <td colspan="6"
+                                        class="text-center text-muted">
+                                        No Products
+                                    </td>
+                                </tr>
 
-                                </td>
-                            </tr>
-
-                            @empty
-
-                            <tr>
-                                <td colspan="6"
-                                    class="text-center text-muted">
-                                    No Products
-                                </td>
-                            </tr>
-
-                            @endforelse
+                                @endforelse
 
                             </tbody>
-
                         </table>
 
                     </div>
@@ -137,13 +139,14 @@
                 <div class="card-body">
 
                     <form method="POST"
-                          action="{{ route('orders.store', app()->getLocale()) }}"
+                          action="{{ route('sales.store', app()->getLocale()) }}"
                           id="saleForm">
 
                         @csrf
 
                         {{-- Customer --}}
                         <div class="mb-3">
+
                             <label class="form-label">
                                 Customer
                             </label>
@@ -156,16 +159,20 @@
                                 </option>
 
                                 @foreach($customers ?? [] as $customer)
+
                                 <option value="{{ $customer->id }}">
                                     {{ $customer->name ?? $customer->customer_name }}
                                 </option>
+
                                 @endforeach
 
                             </select>
+
                         </div>
 
                         {{-- Payment --}}
                         <div class="mb-3">
+
                             <label class="form-label">
                                 Payment Method
                             </label>
@@ -173,17 +180,25 @@
                             <select class="form-select"
                                     name="payment_method">
 
-                                <option value="cash">Cash</option>
-                                <option value="card">Card</option>
+                                <option value="cash">
+                                    Cash
+                                </option>
+
+                                <option value="card">
+                                    Card
+                                </option>
+
                                 <option value="transfer">
                                     Bank Transfer
                                 </option>
 
                             </select>
+
                         </div>
 
-                        {{-- Date --}}
+                        {{-- Sale Date --}}
                         <div class="mb-3">
+
                             <label class="form-label">
                                 Sale Date
                             </label>
@@ -192,6 +207,7 @@
                                    class="form-control"
                                    name="sale_date"
                                    value="{{ date('Y-m-d') }}">
+
                         </div>
 
                         <hr>
@@ -202,8 +218,7 @@
                         </label>
 
                         <div id="cartItems"
-                             style="max-height:220px;
-                             overflow-y:auto;">
+                             style="max-height:220px; overflow-y:auto;">
 
                             <div class="text-center text-muted">
                                 No items added
@@ -236,6 +251,7 @@
                                    value="0"
                                    min="0"
                                    step="0.01">
+
                         </div>
 
                         {{-- Totals --}}
@@ -260,6 +276,7 @@
 
                         {{-- Note --}}
                         <div class="mb-3">
+
                             <label class="form-label">
                                 Note
                             </label>
@@ -267,6 +284,7 @@
                             <textarea class="form-control"
                                       name="note"
                                       rows="2"></textarea>
+
                         </div>
 
                         {{-- Submit --}}
@@ -288,234 +306,288 @@
     </div>
 </div>
 @endsection
-
-
-@section('scripts')
+@push('script')
 <script>
 
-let cart = [];
+document.addEventListener('DOMContentLoaded', function () {
 
-// SEARCH
-document.getElementById('searchInput')
-.addEventListener('input', function () {
+    let cart = [];
 
-    const keyword = this.value.toLowerCase();
+    // =========================
+    // SEARCH PRODUCT
+    // =========================
+    const searchInput =
+        document.getElementById('searchInput');
 
-    document.querySelectorAll(
-        '#productsTable tbody tr'
-    ).forEach(row => {
+    if (searchInput) {
 
-        row.style.display =
-            row.textContent.toLowerCase()
-            .includes(keyword)
-            ? ''
-            : 'none';
+        searchInput.addEventListener(
+            'input',
+            function () {
+
+                const keyword =
+                    this.value.toLowerCase();
+
+                document.querySelectorAll(
+                    '#productsTable tbody tr'
+                ).forEach(row => {
+
+                    row.style.display =
+                        row.textContent
+                        .toLowerCase()
+                        .includes(keyword)
+                        ? ''
+                        : 'none';
+                });
+            }
+        );
+    }
+
+
+    // =========================
+    // ADD TO CART
+    // =========================
+    document.querySelectorAll('.add-to-cart')
+    .forEach(button => {
+
+        button.addEventListener(
+            'click',
+            function () {
+
+                const id =
+                    this.dataset.id;
+
+                // Prevent duplicate
+                if (
+                    cart.find(
+                        item => item.id == id
+                    )
+                ) {
+                    return;
+                }
+
+                cart.push({
+
+                    id: id,
+                    name: this.dataset.name,
+                    imei: this.dataset.imei,
+                    color: this.dataset.color,
+                    storage: this.dataset.storage,
+                    price: parseFloat(
+                        this.dataset.price
+                    )
+                });
+
+                // Button state
+                this.disabled = true;
+
+                this.classList.replace(
+                    'btn-primary',
+                    'btn-success'
+                );
+
+                this.innerHTML = 'Added';
+
+                renderCart();
+            }
+        );
     });
-});
 
 
-// ADD TO CART
-document.querySelectorAll('.add-to-cart')
-.forEach(button => {
+    // =========================
+    // RENDER CART
+    // =========================
+    function renderCart() {
 
-    button.addEventListener('click', function () {
+        const cartItems =
+            document.getElementById(
+                'cartItems'
+            );
 
-        const id =
-            this.dataset.id;
+        if (!cartItems) return;
 
-        if (cart.find(
-            item => item.id === id
-        )) {
+        if (cart.length === 0) {
+
+            cartItems.innerHTML = `
+                <div class="text-center text-muted">
+                    No items added
+                </div>
+            `;
+
+            updateTotals(0);
             return;
         }
 
-        cart.push({
+        let html = '';
+        let subtotal = 0;
 
-            id: id,
-            name: this.dataset.name,
-            imei: this.dataset.imei,
-            color: this.dataset.color,
-            storage: this.dataset.storage,
-            price: parseFloat(
-                this.dataset.price
-            )
+        cart.forEach((item, index) => {
+
+            subtotal += item.price;
+
+            html += `
+            <div class="border rounded p-2 mb-2 bg-light">
+
+                <div class="fw-bold">
+                    ${item.name}
+                </div>
+
+                <small class="d-block">
+                    IMEI: ${item.imei}
+                </small>
+
+                <small class="d-block">
+                    Color: ${item.color || '-'}
+                </small>
+
+                <small class="d-block">
+                    Storage: ${item.storage || '-'}
+                </small>
+
+                <div class="text-success fw-bold mt-1">
+                    $${item.price.toFixed(2)}
+                </div>
+
+                <input type="hidden"
+                       name="cart[${index}][product_id]"
+                       value="${item.id}">
+
+                <input type="hidden"
+                       name="cart[${index}][price]"
+                       value="${item.price}">
+
+                <button type="button"
+                        class="btn btn-sm btn-danger remove-item mt-2"
+                        data-index="${index}">
+                    Remove
+                </button>
+
+            </div>
+            `;
         });
 
-        this.disabled = true;
-        this.classList
-            .replace(
-                'btn-primary',
-                'btn-success'
+        cartItems.innerHTML = html;
+
+        updateTotals(subtotal);
+    }
+
+
+    // =========================
+    // TOTALS
+    // =========================
+    function updateTotals(subtotal) {
+
+        const discount =
+            parseFloat(
+                document.getElementById(
+                    'discount'
+                )?.value
+            ) || 0;
+
+        const grandTotal =
+            Math.max(
+                0,
+                subtotal - discount
             );
 
-        this.innerHTML = 'Added';
-
-        renderCart();
-    });
-});
-
-
-// RENDER CART
-function renderCart() {
-
-    const cartItems =
         document.getElementById(
-            'cartItems'
-        );
+            'subtotal'
+        ).textContent =
+            '$' + subtotal.toFixed(2);
 
-    if (cart.length === 0) {
+        document.getElementById(
+            'grandTotal'
+        ).textContent =
+            '$' + grandTotal.toFixed(2);
 
-        cartItems.innerHTML = `
-            <div class="text-center text-muted">
-                No items added
-            </div>`;
+        document.getElementById(
+            'discountInput'
+        ).value =
+            discount;
 
-        updateTotals(0);
-        return;
+        document.getElementById(
+            'grandTotalInput'
+        ).value =
+            grandTotal;
     }
 
-    let html = '';
-    let subtotal = 0;
 
-    cart.forEach((item, index) => {
-
-        subtotal += item.price;
-
-        html += `
-        <div class="border rounded p-2 mb-2 bg-light">
-
-            <div class="fw-bold">
-                ${item.name}
-            </div>
-
-            <small>
-                ${item.imei}
-            </small>
-
-            <div class="text-success fw-bold">
-                $${item.price.toFixed(2)}
-            </div>
-
-            <input type="hidden"
-                   name="cart[${index}][product_id]"
-                   value="${item.id}">
-
-            <input type="hidden"
-                   name="cart[${index}][price]"
-                   value="${item.price}">
-
-            <button type="button"
-                    class="btn btn-sm btn-danger remove-item mt-2"
-                    data-index="${index}">
-                Remove
-            </button>
-
-        </div>
-        `;
-    });
-
-    cartItems.innerHTML = html;
-
-    updateTotals(subtotal);
-}
-
-
-// TOTALS
-function updateTotals(subtotal) {
-
-    const discount =
-        parseFloat(
-            document.getElementById(
-                'discount'
-            ).value
-        ) || 0;
-
-    const grandTotal =
-        Math.max(
-            0,
-            subtotal - discount
+    // =========================
+    // DISCOUNT
+    // =========================
+    const discountField =
+        document.getElementById(
+            'discount'
         );
 
-    document.getElementById(
-        'subtotal'
-    ).textContent =
-        '$' + subtotal.toFixed(2);
+    if (discountField) {
 
-    document.getElementById(
-        'grandTotal'
-    ).textContent =
-        '$' + grandTotal.toFixed(2);
+        discountField.addEventListener(
+            'input',
+            function () {
 
-    document.getElementById(
-        'discountInput'
-    ).value =
-        discount;
+                const subtotal =
+                    cart.reduce(
+                        (sum, item) =>
+                            sum + item.price,
+                        0
+                    );
 
-    document.getElementById(
-        'grandTotalInput'
-    ).value =
-        grandTotal;
-}
-
-
-// DISCOUNT
-document.getElementById('discount')
-.addEventListener('input', function () {
-
-    const subtotal =
-        cart.reduce(
-            (sum, item) =>
-                sum + item.price,
-            0
+                updateTotals(subtotal);
+            }
         );
-
-    updateTotals(subtotal);
-});
+    }
 
 
-// REMOVE ITEM
-document.addEventListener(
-    'click',
-    function (e) {
+    // =========================
+    // REMOVE ITEM
+    // =========================
+    document.addEventListener(
+        'click',
+        function (e) {
 
-        const btn =
-            e.target.closest(
-                '.remove-item'
+            const btn =
+                e.target.closest(
+                    '.remove-item'
+                );
+
+            if (!btn) return;
+
+            const index =
+                parseInt(
+                    btn.dataset.index
+                );
+
+            const removedId =
+                cart[index].id;
+
+            cart.splice(
+                index,
+                1
             );
 
-        if (!btn) return;
+            renderCart();
 
-        const index =
-            parseInt(
-                btn.dataset.index
-            );
+            const addBtn =
+                document.querySelector(
+                    `.add-to-cart[data-id="${removedId}"]`
+                );
 
-        const removedId =
-            cart[index].id;
+            if (addBtn) {
 
-        cart.splice(index,1);
+                addBtn.disabled = false;
 
-        renderCart();
+                addBtn.classList.replace(
+                    'btn-success',
+                    'btn-primary'
+                );
 
-        const addBtn =
-            document.querySelector(
-                `.add-to-cart[data-id="${removedId}"]`
-            );
-
-        if (addBtn) {
-
-            addBtn.disabled = false;
-
-            addBtn.classList
-            .replace(
-                'btn-success',
-                'btn-primary'
-            );
-
-            addBtn.innerHTML = 'Add';
+                addBtn.innerHTML = 'Add';
+            }
         }
-    }
-);
+    );
+
+});
 
 </script>
-@endsection
+@endpush

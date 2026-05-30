@@ -94,25 +94,31 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
       Route::get('/create', [OrderController::class, 'create'])->name('create');
-
     });
-    
+
+    Route::resource('orders', OrderController::class);
 
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
 
-    Route::get('/', [OrderController::class, 'index'])
-        ->name('index');
+        Route::get('/', [OrderController::class, 'index'])
+            ->name('index');
 
-    Route::get('/create', [OrderController::class, 'create'])
-        ->name('create');
+        Route::get('/create', [OrderController::class, 'create'])
+            ->name('create');
 
-    Route::post('/store', [OrderController::class, 'store'])
-        ->name('store');
+        Route::post('/store', [OrderController::class, 'store'])
+            ->name('store');
 
-    Route::get('/show/{order}', [OrderController::class, 'show'])
-        ->name('show');
+        Route::get('/show/{order}', [OrderController::class, 'show'])
+            ->name('show');
 
-});
+        // FIX: Delete route moved inside {lang} group with Order model binding
+        // so destroy() receives the Order model correctly and withLang() works
+        Route::delete('/{order}', [OrderController::class, 'destroy'])
+            ->name('destroy');
+
+    });
+
     Route::group(['prefix'=>'cart','as'=>'carts.'], function(){
       Route::post('/store', [CartController::class, 'store'])->name('store');
       Route::delete('/destroy', [CartController::class, 'destroy'])->name('destroy');
@@ -217,6 +223,9 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
     Route::get('products/check/{id}', [ProductController::class, 'getProductById'])->name('get-product-by-id');
     Route::get('company/', [CompanySettingController::class, 'index'])->name('company.index');
     Route::put('company/', [CompanySettingController::class, 'update'])->name('company.update');
-    
+
 });
 
+// FIX: Removed broken delete route that was outside {lang} group
+// Route::delete('/sale/{id}', [OrderController::class, 'destroy'])->name('sales.destroy');
+// It is now correctly placed inside the {lang}/sale group above as 'sales.destroy'

@@ -52,13 +52,15 @@
                                     <span class="tf-icons bx bx-detail"></span>
                                 </a>
                               @endcan
-                                <form method="POST" action="{{ route('sales.destroy', withLang(['order' => $order->id])) }}" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-icon btn-outline-danger" onclick="return confirm('Are you sure you want to delete this sale?')">
-                                        <span class="tf-icons bx bx-trash"></span>
-                                    </button>
-                                </form>
+                              {{-- FIX: Use 'sales.destroy' route (now inside {lang} group) with Order model binding --}}
+                              <form method="POST" action="{{ route('sales.destroy', withLang(['order' => $order->id])) }}" class="d-inline">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" class="btn btn-icon btn-outline-danger"
+                                      onclick="return confirm('Are you sure you want to delete this sale?')">
+                                      <span class="tf-icons bx bx-trash"></span>
+                                  </button>
+                              </form>
                           </td>
                       </tr>
                       @empty
@@ -107,8 +109,9 @@
                         <div class="row g-2 mb-3">
                             <div class="col mb-0">
                                 <label for="customer" class="form-label">{{__('order.customer')}}</label>
+                                {{-- FIX: $customers is now [id => name] via pluck() so $key=id, $value=name --}}
                                 <select id="customer" class="select2 form-select" name="customer">
-                                    <option value="">Select Customer </option>
+                                    <option value="">Select Customer</option>
                                     @foreach ($customers as $key => $value)
                                         <option value="{{ $key }}" @if(isset($parameterNames['customer']) && $parameterNames['customer'] == $key) selected @endif>{{ $value }}</option>
                                     @endforeach
@@ -151,7 +154,6 @@
                     url: '/en/series/brand/' + brandID,
                     dataType: 'json',
                     success: function(data) {
-                        // Clear and populate select2 with new data
                         var series = $('#series');
                         series.empty();
                         series.append('<option>Select an option</option>');
@@ -163,7 +165,6 @@
                     }
                 });
             } else {
-                // Reset select2 when nothing is selected in select1
                 $('#series').empty().append('<option value="">Select an option</option>');
                 $('#series').prop("disabled", true);
             }
