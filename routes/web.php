@@ -232,3 +232,15 @@ Route::get('{lang}/orders/create', [OrderController::class, 'create'])
     ->name('orders.create');
 
 Route::post('/orders/store', [OrderController::class, 'store']) ->name('orders.store');
+
+
+
+// Route::group(['prefix'=>'sale','as'=>'sales.'], function () {
+
+//     Route::get('/create', [OrderController::class, 'create'])
+//         ->name('create');
+
+//     Route::post('/store', [OrderController::class, 'store'])
+//         ->name('store');
+
+// });

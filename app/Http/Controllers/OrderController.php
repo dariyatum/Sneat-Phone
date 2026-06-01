@@ -26,14 +26,32 @@ class OrderController extends Controller
 // }
 
 
+// public function create()
+// {
+//     $products = Product::all();
+//     return view('orders.create', compact('products'));
+// }
+
+
+
+
+
 public function create()
 {
     $products = Product::all();
 
-    return view('orders.create', compact('products'));
+    $cartItems = Cart::with('product')->where('user_id', auth()->id()) ->get();
+
+    return view('orders.create', compact(
+        'products',
+        'cartItems'
+    ));
 }
 
-
+public function store(Request $request)
+{
+    // all submit order logic here
+}
 
   function __construct()
   {
@@ -137,4 +155,6 @@ public function create()
       $type = $request->type ?? 'download';
       return view('orders.invoice-pdf', compact('order', 'order_detals', 'currentDate' ,'file_pdf', 'type'));
     }
+
+    
 }

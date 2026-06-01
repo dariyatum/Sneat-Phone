@@ -47,6 +47,7 @@
                             <i class="bx bx-user"></i> </span>
                         <select class="form-select border-start-0 ps-0">
                             <option selected>តាំងសេង</option>
+                            <option selected>Kim Kim</option>
                         </select>
                     </div>
 
