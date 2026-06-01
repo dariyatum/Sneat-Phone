@@ -365,10 +365,7 @@
                 {{-- Buttons --}}
                 <div class="mt-4 d-flex gap-2">
 
-                    <a href="{{ route('products.index', withLang()) }}"
-                       class="btn btn-light border px-4">
-                        Cancel
-                    </a>
+                    <button type="reset" class="btn btn-outline-secondary">{{__('button.cancel')}}</button>
 
                     <button type="submit" class="btn btn-primary px-4">
                         Save Product

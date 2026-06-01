@@ -314,6 +314,26 @@ document.addEventListener('DOMContentLoaded', function () {
     let cart = [];
 
     // =========================
+    // FIX: SUBMIT GUARD
+    // =========================
+    const saleForm = document.getElementById('saleForm');
+
+    if (saleForm) {
+        saleForm.addEventListener('submit', function (e) {
+
+            if (cart.length === 0) {
+                e.preventDefault();
+                alert('Please add at least one item to the cart before completing the sale.');
+                return;
+            }
+
+            // Re-render to guarantee hidden inputs are in the DOM
+            renderCart();
+        });
+    }
+
+
+    // =========================
     // SEARCH PRODUCT
     // =========================
     const searchInput =

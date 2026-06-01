@@ -77,7 +77,7 @@
 
                 <!-- Layout container -->
                 <div class="layout-page">
-                    <x-navbar />
+                    <x-sidebar />
                     <!-- Content wrapper -->
                     <div class="content-wrapper">
                         @yield('content')

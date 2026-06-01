@@ -29,7 +29,7 @@
                 <tbody class="table-border-bottom-0">
                     @foreach ($roles as $key => $role)
                         <tr>
-                            <td>{{ ++$i }}</td>
+                            <td>{{ $role->id }}</td>
                             <td><strong>{{ $role->name }}</strong></td>
                             <td>
                                 @can('role-list')

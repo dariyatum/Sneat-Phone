@@ -139,63 +139,37 @@
 <!-- / Content -->
 @endsection
 @push('script')
-    <script>
-        $( document ).ready(function() {
-            $('.edit-storages').click(function(){
-                var id = $(this).attr("data-id");
-                var name = $(this).attr("data-value");
+@push('script')
+<script>
+    $(document).ready(function () {
 
-                $('#editstorages #storage-id').val(id);
-                $('#editstorages #storage-name').val(name);
-            });
+        // OPEN EDIT MODAL
+        $('.edit-storages').click(function () {
 
+            var id = $(this).data('id');
+            var name = $(this).data('value');
 
-            $('#editstorages form').submit(function(e) {
-                e.preventDefault(); // Prevent the form from submitting
+            $('#storage-id').val(id);
+            $('#storage-name').val(name);
 
-                var name = $('#editstorages #storage-name').val();
-                var id = $('#editstorages #storage-id').val();
-
-                // Make an AJAX request to check for uniqueness
-                $.ajax({
-                    url: '{{ route('storage.update', withLang()) }}',
-                    method: 'POST',
-                    data: { name: name, id: id },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.isUnique) {
-                            // Field is unique, allow form submission
-                            // $('#editstorages form')[0].submit();
-                            var div = document.getElementById('myDiv');
-                            div.style.display = 'block';
-                        } else {
-                            // Field is not unique, display an alert message
-                            // alert('The name is not unique.');
-                            // redirect(Request::url(response));
-                            $('#editstorages form')[0].submit();
-                        }
-                    },
-                    error: function() {
-                        var div = document.getElementById('myDiv');
-                        if (div.style.display === 'none' || div.style.display === '') {
-                            div.style.display = 'block'; // Show the div
-                        } else {
-                            div.style.display = 'none'; // Hide the div
-                        }
-                    }
-                });
-            });
-
-
-
+            // hide error message when modal opens
+            $('#myDiv').hide();
         });
 
 
-        function submitForm(){
-            $('.submit-delete').click();
-        }
 
-    </script>
+        // EDIT FORM SUBMIT
+$('#editstorages form').submit(function(e) {
+
+    e.preventDefault();
+
+    $('#myDiv').hide();
+
+    this.submit();
+
+});
+
+    });
+</script>
+@endpush
 @endpush
