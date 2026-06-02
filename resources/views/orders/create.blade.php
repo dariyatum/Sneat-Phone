@@ -1,613 +1,153 @@
-@extends('layouts.app')
 
-@section('content')
-<div class="container-fluid">
 
-    {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4>
-            <i class="fas fa-cash-register me-2"></i>
-            New Sale
-        </h4>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone POS System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 font-sans h-screen flex flex-col overflow-hidden">
 
-        <a href="{{ route('orders.index', app()->getLocale()) }}"
-           class="btn btn-secondary">
-            <i class="fas fa-arrow-left me-1"></i>
-            Back to Sales List
-        </a>
+    <div class="flex flex-1 overflow-hidden">
+        
+        <aside class="w-20 bg-white border-r border-gray-200 flex flex-col items-center py-4 space-y-4">
+            <div class="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center text-white font-bold mb-4">
+                <i class="fab fa-apple text-xl"></i>
+            </div>
+            
+            <button class="w-16 h-16 bg-blue-600 text-white rounded-xl flex flex-col items-center justify-center text-xs font-semibold shadow-md transition">
+                <i class="fas fa-search text-base mb-1"></i>
+                Search
+            </button>
+            
+            <button class="w-16 h-16 bg-blue-50 text-blue-600 rounded-xl flex flex-col items-center justify-center text-xs font-semibold border border-blue-200 transition hover:bg-blue-100">
+                <i class="fas fa-mobile-alt text-base mb-1"></i>
+                All Phones
+            </button>
+            
+            <button class="w-16 h-16 text-gray-500 rounded-xl flex flex-col items-center justify-center text-xs font-semibold border border-gray-200 transition hover:bg-gray-50">
+                <i class="fab fa-apple text-lg mb-1 text-black"></i>
+                APPLE
+            </button>
+        </aside>
+
+        <main class="flex-1 p-6 overflow-y-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition flex flex-col">
+                    <div class="h-48 bg-gray-50 flex items-center justify-center overflow-hidden p-2">
+                        <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400" alt="iPhone 13" class="h-full object-contain object-center">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm">iPhone 13 [ IMEI: 9111 ]</h3>
+                            <p class="text-xs text-gray-400 mt-1">Used, iPhone 13, 256G, Black, Original</p>
+                        </div>
+                        <div class="mt-4 text-base font-bold text-gray-900">$295.00</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition flex flex-col">
+                    <div class="h-48 bg-gray-50 flex items-center justify-center overflow-hidden p-2">
+                        <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400" alt="iPhone 15 Pro Max" class="h-full object-contain object-center">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm">iPhone 15 pro max [ IMEI: 8497 ]</h3>
+                            <p class="text-xs text-gray-400 mt-1">Used, iPhone 15 Promax, 512GB, Black, Original</p>
+                        </div>
+                        <div class="mt-4 text-base font-bold text-gray-900">$870.00</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition flex flex-col">
+                    <div class="h-48 bg-gray-50 flex items-center justify-center overflow-hidden p-2">
+                        <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400" alt="iPhone 15" class="h-full object-contain object-center">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm">iPhone 15 [ IMEI: 2111 ]</h3>
+                            <p class="text-xs text-gray-400 mt-1">Used, iPhone 15, 256G, Black, Original</p>
+                        </div>
+                        <div class="mt-4 text-base font-bold text-gray-900">$560.00</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition flex flex-col">
+                    <div class="h-48 bg-gray-50 flex items-center justify-center overflow-hidden p-2">
+                        <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400" alt="iPhone 15" class="h-full object-contain object-center">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm">15 [ IMEI: 5705 ]</h3>
+                            <p class="text-xs text-gray-400 mt-1">Used, iPhone 15, 128GB, Black, Original</p>
+                        </div>
+                        <div class="mt-4 text-base font-bold text-gray-900">$490.00</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition flex flex-col">
+                    <div class="h-48 bg-gray-50 flex flex-col items-center justify-center p-4 border-b border-gray-100">
+                        <i class="fas fa-camera text-4xl text-gray-300 mb-2"></i>
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider text-center">Product Image Coming Soon</span>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm">iPhone 13 [ IMEI: -- ]</h3>
+                            <p class="text-xs text-gray-400 mt-1">Used, iPhone 13, 128G, Stock Item</p>
+                        </div>
+                        <div class="mt-4 text-base font-bold text-gray-900">$330.00</div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <aside class="w-80 bg-white border-l border-gray-200 flex flex-col justify-between shadow-lg">
+            <div class="p-4 border-b border-gray-100">
+                <div class="text-xs text-gray-400 mb-1 font-medium">Order: <span class="font-bold text-gray-700">#00953</span></div>
+                
+                <div class="relative mt-2">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-user text-gray-400 text-sm"></i>
+                    </div>
+                    <select class="block w-full pl-9 pr-8 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer">
+                        <option>តាំងសេង</option>
+                        <option>Walk-in Customer</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400 text-xs">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center justify-center p-6 text-gray-400 space-y-2">
+                <i class="fas fa-shopping-basket text-4xl text-gray-200"></i>
+                <p class="text-sm">Cart is empty</p>
+            </div>
+
+            <div class="p-4 border-t border-gray-100 bg-gray-50">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm font-semibold text-gray-500">Total</span>
+                    <span class="text-xl font-black text-gray-950">$ 0</span>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-2">
+                    <button class="col-span-1 bg-gray-200 text-gray-500 rounded-lg py-3 flex items-center justify-center hover:bg-gray-300 transition cursor-not-allowed" disabled>
+                        <i class="fas fa-receipt text-lg"></i>
+                    </button>
+                    <button class="col-span-3 bg-blue-600 text-white rounded-lg py-3 px-4 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-blue-700 transition shadow-md shadow-blue-200">
+                        <i class="fas fa-cash-register"></i>
+                        Submit Order
+                    </button>
+                </div>
+            </div>
+        </aside>
+
     </div>
 
-    <div class="row g-4">
-
-        {{-- LEFT: Products --}}
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
-
-                <div class="card-header">
-                    <h6 class="mb-0">
-                        <i class="fas fa-box me-2"></i>
-                        Available Products
-                    </h6>
-                </div>
-
-                <div class="card-body">
-
-                    {{-- Search --}}
-                    <div class="input-group mb-3">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-search text-muted"></i>
-                        </span>
-
-                        <input type="text"
-                               id="searchInput"
-                               class="form-control"
-                               placeholder="Search product...">
-                    </div>
-
-                    {{-- Products Table --}}
-                    <div class="table-responsive"
-                         style="max-height:60vh; overflow-y:auto;">
-
-                        <table class="table table-hover align-middle"
-                               id="productsTable">
-
-                            <thead class="table-light sticky-top">
-                                <tr>
-                                    <th>Product</th>
-                                    <th>IMEI</th>
-                                    <th>Color</th>
-                                    <th>Storage</th>
-                                    <th class="text-end">Price</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                @forelse($products ?? [] as $product)
-                                <tr>
-
-                                    <td>
-                                        {{ $product->product_name }}
-                                    </td>
-
-                                    <td>
-                                        <code>
-                                            {{ $product->product_imei }}
-                                        </code>
-                                    </td>
-
-                                    <td>
-                                        {{ $product->color->name ?? '-' }}
-                                    </td>
-
-                                    <td>
-                                        {{ $product->storage->name ?? '-' }}
-                                    </td>
-
-                                    <td class="text-end text-success fw-bold">
-                                        ${{ number_format($product->selling_price ?? 0, 2) }}
-                                    </td>
-
-                                    <td class="text-center">
-                                        <button type="button"
-                                                class="btn btn-sm btn-primary add-to-cart"
-                                                data-id="{{ $product->id }}"
-                                                data-name="{{ $product->product_name }}"
-                                                data-imei="{{ $product->product_imei }}"
-                                                data-color="{{ $product->color->name ?? '' }}"
-                                                data-storage="{{ $product->storage->name ?? '' }}"
-                                                data-price="{{ $product->selling_price ?? 0 }}">
-                                            Add
-                                        </button>
-                                    </td>
-
-                                </tr>
-                                @empty
-
-                                <tr>
-                                    <td colspan="6"
-                                        class="text-center text-muted">
-                                        No Products
-                                    </td>
-                                </tr>
-
-                                @endforelse
-
-                            </tbody>
-                        </table>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        {{-- RIGHT: Sale Form --}}
-        <div class="col-lg-4">
-
-            <div class="card shadow-sm sticky-top"
-                 style="top:20px;">
-
-                <div class="card-header bg-success text-white">
-                    <h6 class="mb-0">
-                        <i class="fas fa-receipt me-2"></i>
-                        Sale Summary
-                    </h6>
-                </div>
-
-                <div class="card-body">
-
-                    <form method="POST"
-                          action="{{ route('sales.store', app()->getLocale()) }}"
-                          id="saleForm">
-
-                        @csrf
-
-                        {{-- Customer --}}
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Customer
-                            </label>
-
-                            <select class="form-select"
-                                    name="customer_id">
-
-                                <option value="">
-                                    Walk-in Customer
-                                </option>
-
-                                @foreach($customers ?? [] as $customer)
-
-                                <option value="{{ $customer->id }}">
-                                    {{ $customer->name ?? $customer->customer_name }}
-                                </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                        {{-- Payment --}}
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Payment Method
-                            </label>
-
-                            <select class="form-select"
-                                    name="payment_method">
-
-                                <option value="cash">
-                                    Cash
-                                </option>
-
-                                <option value="card">
-                                    Card
-                                </option>
-
-                                <option value="transfer">
-                                    Bank Transfer
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        {{-- Sale Date --}}
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Sale Date
-                            </label>
-
-                            <input type="date"
-                                   class="form-control"
-                                   name="sale_date"
-                                   value="{{ date('Y-m-d') }}">
-
-                        </div>
-
-                        <hr>
-
-                        {{-- Cart --}}
-                        <label class="fw-bold mb-2">
-                            Cart Items
-                        </label>
-
-                        <div id="cartItems"
-                             style="max-height:220px; overflow-y:auto;">
-
-                            <div class="text-center text-muted">
-                                No items added
-                            </div>
-
-                        </div>
-
-                        <hr>
-
-                        {{-- Hidden Inputs --}}
-                        <input type="hidden"
-                               name="discount"
-                               id="discountInput"
-                               value="0">
-
-                        <input type="hidden"
-                               name="grand_total"
-                               id="grandTotalInput">
-
-                        {{-- Discount --}}
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Discount
-                            </label>
-
-                            <input type="number"
-                                   class="form-control"
-                                   id="discount"
-                                   value="0"
-                                   min="0"
-                                   step="0.01">
-
-                        </div>
-
-                        {{-- Totals --}}
-                        <div class="mb-3">
-
-                            <div>
-                                <strong>Subtotal:</strong>
-                                <span id="subtotal">
-                                    $0.00
-                                </span>
-                            </div>
-
-                            <div>
-                                <strong>Grand Total:</strong>
-                                <span id="grandTotal"
-                                      class="text-success">
-                                    $0.00
-                                </span>
-                            </div>
-
-                        </div>
-
-                        {{-- Note --}}
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Note
-                            </label>
-
-                            <textarea class="form-control"
-                                      name="note"
-                                      rows="2"></textarea>
-
-                        </div>
-
-                        {{-- Submit --}}
-                        <button type="submit"
-                                class="btn btn-success w-100"
-                                id="completeSaleBtn">
-
-                            <i class="fas fa-check-circle me-1"></i>
-                            Complete Sale
-
-                        </button>
-
-                    </form>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-@endsection
-@push('script')
-<script>
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    let cart = [];
-
-    // =========================
-    // FIX: SUBMIT GUARD
-    // =========================
-    const saleForm = document.getElementById('saleForm');
-
-    if (saleForm) {
-        saleForm.addEventListener('submit', function (e) {
-
-            if (cart.length === 0) {
-                e.preventDefault();
-                alert('Please add at least one item to the cart before completing the sale.');
-                return;
-            }
-
-            // Re-render to guarantee hidden inputs are in the DOM
-            renderCart();
-        });
-    }
-
-
-    // =========================
-    // SEARCH PRODUCT
-    // =========================
-    const searchInput =
-        document.getElementById('searchInput');
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            'input',
-            function () {
-
-                const keyword =
-                    this.value.toLowerCase();
-
-                document.querySelectorAll(
-                    '#productsTable tbody tr'
-                ).forEach(row => {
-
-                    row.style.display =
-                        row.textContent
-                        .toLowerCase()
-                        .includes(keyword)
-                        ? ''
-                        : 'none';
-                });
-            }
-        );
-    }
-
-
-    // =========================
-    // ADD TO CART
-    // =========================
-    document.querySelectorAll('.add-to-cart')
-    .forEach(button => {
-
-        button.addEventListener(
-            'click',
-            function () {
-
-                const id =
-                    this.dataset.id;
-
-                // Prevent duplicate
-                if (
-                    cart.find(
-                        item => item.id == id
-                    )
-                ) {
-                    return;
-                }
-
-                cart.push({
-
-                    id: id,
-                    name: this.dataset.name,
-                    imei: this.dataset.imei,
-                    color: this.dataset.color,
-                    storage: this.dataset.storage,
-                    price: parseFloat(
-                        this.dataset.price
-                    )
-                });
-
-                // Button state
-                this.disabled = true;
-
-                this.classList.replace(
-                    'btn-primary',
-                    'btn-success'
-                );
-
-                this.innerHTML = 'Added';
-
-                renderCart();
-            }
-        );
-    });
-
-
-    // =========================
-    // RENDER CART
-    // =========================
-    function renderCart() {
-
-        const cartItems =
-            document.getElementById(
-                'cartItems'
-            );
-
-        if (!cartItems) return;
-
-        if (cart.length === 0) {
-
-            cartItems.innerHTML = `
-                <div class="text-center text-muted">
-                    No items added
-                </div>
-            `;
-
-            updateTotals(0);
-            return;
-        }
-
-        let html = '';
-        let subtotal = 0;
-
-        cart.forEach((item, index) => {
-
-            subtotal += item.price;
-
-            html += `
-            <div class="border rounded p-2 mb-2 bg-light">
-
-                <div class="fw-bold">
-                    ${item.name}
-                </div>
-
-                <small class="d-block">
-                    IMEI: ${item.imei}
-                </small>
-
-                <small class="d-block">
-                    Color: ${item.color || '-'}
-                </small>
-
-                <small class="d-block">
-                    Storage: ${item.storage || '-'}
-                </small>
-
-                <div class="text-success fw-bold mt-1">
-                    $${item.price.toFixed(2)}
-                </div>
-
-                <input type="hidden"
-                       name="cart[${index}][product_id]"
-                       value="${item.id}">
-
-                <input type="hidden"
-                       name="cart[${index}][price]"
-                       value="${item.price}">
-
-                <button type="button"
-                        class="btn btn-sm btn-danger remove-item mt-2"
-                        data-index="${index}">
-                    Remove
-                </button>
-
-            </div>
-            `;
-        });
-
-        cartItems.innerHTML = html;
-
-        updateTotals(subtotal);
-    }
-
-
-    // =========================
-    // TOTALS
-    // =========================
-    function updateTotals(subtotal) {
-
-        const discount =
-            parseFloat(
-                document.getElementById(
-                    'discount'
-                )?.value
-            ) || 0;
-
-        const grandTotal =
-            Math.max(
-                0,
-                subtotal - discount
-            );
-
-        document.getElementById(
-            'subtotal'
-        ).textContent =
-            '$' + subtotal.toFixed(2);
-
-        document.getElementById(
-            'grandTotal'
-        ).textContent =
-            '$' + grandTotal.toFixed(2);
-
-        document.getElementById(
-            'discountInput'
-        ).value =
-            discount;
-
-        document.getElementById(
-            'grandTotalInput'
-        ).value =
-            grandTotal;
-    }
-
-
-    // =========================
-    // DISCOUNT
-    // =========================
-    const discountField =
-        document.getElementById(
-            'discount'
-        );
-
-    if (discountField) {
-
-        discountField.addEventListener(
-            'input',
-            function () {
-
-                const subtotal =
-                    cart.reduce(
-                        (sum, item) =>
-                            sum + item.price,
-                        0
-                    );
-
-                updateTotals(subtotal);
-            }
-        );
-    }
-
-
-    // =========================
-    // REMOVE ITEM
-    // =========================
-    document.addEventListener(
-        'click',
-        function (e) {
-
-            const btn =
-                e.target.closest(
-                    '.remove-item'
-                );
-
-            if (!btn) return;
-
-            const index =
-                parseInt(
-                    btn.dataset.index
-                );
-
-            const removedId =
-                cart[index].id;
-
-            cart.splice(
-                index,
-                1
-            );
-
-            renderCart();
-
-            const addBtn =
-                document.querySelector(
-                    `.add-to-cart[data-id="${removedId}"]`
-                );
-
-            if (addBtn) {
-
-                addBtn.disabled = false;
-
-                addBtn.classList.replace(
-                    'btn-success',
-                    'btn-primary'
-                );
-
-                addBtn.innerHTML = 'Add';
-            }
-        }
-    );
-
-});
-
-</script>
-@endpush
+</body>
+</html>
