@@ -100,19 +100,19 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
 
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
 
-    Route::get('/', [OrderController::class, 'index'])
-        ->name('index');
+        Route::get('/', [OrderController::class, 'index'])
+            ->name('index');
 
-    Route::get('/create', [OrderController::class, 'create'])
-        ->name('create');
+        Route::get('/create', [OrderController::class, 'create'])
+            ->name('create');
 
-    Route::post('/store', [OrderController::class, 'store'])
-        ->name('store');
+        Route::post('/store', [OrderController::class, 'store'])
+            ->name('store');
 
-    Route::get('/show/{order}', [OrderController::class, 'show'])
-        ->name('show');
+        Route::get('/show/{order}', [OrderController::class, 'show'])
+            ->name('show');
 
-});
+    });
     Route::group(['prefix'=>'cart','as'=>'carts.'], function(){
       Route::post('/store', [CartController::class, 'store'])->name('store');
       Route::delete('/destroy', [CartController::class, 'destroy'])->name('destroy');
