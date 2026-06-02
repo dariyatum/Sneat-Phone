@@ -91,17 +91,24 @@ public function store(Request $request)
             $parameterNames['to_date'] = $filters['to_date'];
         }
     }
-
-    $orders = $query->orderBy('order_date', 'desc')->paginate(20);
-    session(['printInvoiceId' => null]);
-    return view('orders.index', compact(
-      'orders',
-      'customers',
-      'parameterNames'
-    ));
   }
 
-     /**
+    /**
+     * Display a listing of the resource.
+     */
+
+
+    /**
+     * Show the form for creating a new resource.
+     */
+
+
+    /**
+     * Store a newly created resource in storage.
+     */
+
+
+    /**
      * Display the specified resource.
      */
     public function show(string $lang, Order $order)
@@ -111,16 +118,12 @@ public function store(Request $request)
         return view('orders.show', compact('order', 'order_detals'));
     }
 
-
     /**
-     * * Display the specified resource.
-     * */
+     * Check if products are still available before submitting order.
+     */
     public function checkProductOrder(Request $request)
     {
-        // Attach order details to the order
         foreach ($request->productIds as $key => $productId) {
-
-            // Check if the product is available
             $product = Product::available()->find($productId);
             if (!$product) {
                 return response()->json(['message' => 'Product not found.'], 404);
@@ -129,15 +132,27 @@ public function store(Request $request)
         return response()->json(['message' => 'Submiting Order'], 201);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(string $lang, Order $order)
     {
-        $orderDetial = OrderDetail::where('order_id', $order->id)->get();
+        // FIX: Restore product status back to available (1) before deleting
+        $orderDetails = OrderDetail::where('order_id', $order->id)->get();
 
-      return redirect()->route('sales.index', withLang())->with('success', 'Sale deleted successfully');
+        foreach ($orderDetails as $detail) {
+            Product::where('id', $detail->product_id)->update(['status' => Product::STATUS_ID_AVAILABLE]);
+            $detail->delete();
+        }
+
+        // FIX: Actually delete the order
+        $order->delete();
+
+        return redirect()->route('sales.index', app()->getLocale())->with('success', 'Sale deleted successfully');
     }
 
-     /**
-     * Display the specified resource.
+    /**
+     * Display invoice view.
      */
     public function invoice(string $lang, Order $order)
     {
@@ -146,14 +161,17 @@ public function store(Request $request)
         return view('orders.invoice', compact('order', 'order_detals'));
     }
 
+    /**
+     * Generate PDF invoice.
+     */
     public function invoicePdf(Request $request, string $lang, Order $order)
     {
-      $currentDate = Carbon::now()->format('Y-m-d');
-      $order = $order->with('orderDetails', 'customer', 'employee')->findOrfail($order->id);
-      $order_detals = OrderDetail::where('order_id', $order->id)->with('product')->get();
-      $file_pdf = 'invoice-'.str_pad($order->id, 5, '0', STR_PAD_LEFT).'.pdf';
-      $type = $request->type ?? 'download';
-      return view('orders.invoice-pdf', compact('order', 'order_detals', 'currentDate' ,'file_pdf', 'type'));
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $order = $order->with('orderDetails', 'customer', 'employee')->findOrfail($order->id);
+        $order_detals = OrderDetail::where('order_id', $order->id)->with('product')->get();
+        $file_pdf = 'invoice-' . str_pad($order->id, 5, '0', STR_PAD_LEFT) . '.pdf';
+        $type = $request->type ?? 'download';
+        return view('orders.invoice-pdf', compact('order', 'order_detals', 'currentDate', 'file_pdf', 'type'));
     }
 
     
