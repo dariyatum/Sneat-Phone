@@ -17,6 +17,8 @@ class CartController extends Controller
       $this->middleware('permission:order-edit', ['only' => ['edit','update']]);
       $this->middleware('permission:order-delete', ['only' => ['destroy']]);
   }
+
+  
     /**
      * Store a newly created resource in storage.
      */
@@ -65,4 +67,5 @@ class CartController extends Controller
           'total' => $totalCartsPrice,
         ]);
     }
+
 }

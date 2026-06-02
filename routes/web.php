@@ -231,6 +231,9 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
 // FIX: Removed broken delete route that was outside {lang} group
 // Route::delete('/sale/{id}', [OrderController::class, 'destroy'])->name('sales.destroy');
 // It is now correctly placed inside the {lang}/sale group above as 'sales.destroy'
+
+
+
 // for sidebar
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 
