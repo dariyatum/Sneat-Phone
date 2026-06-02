@@ -4,7 +4,7 @@
         <a href="{{ route('home') }}" class="app-brand-link">
             <span class="app-brand-logo custom">
          
-                <img src="{{ $company->logo }}" alt="logo" width="50px"/>
+                <img src="{{ asset('images/company/' . $company->logo) }}" alt="logo" width="50">
                 
             </span>
             <span class="app-brand-text custom menu-text fw-bolder ms-2">{{ $company->name ?? ''}}</span>
