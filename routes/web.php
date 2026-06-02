@@ -23,6 +23,8 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\GurantorController;
+use App\Http\Controllers\SaleController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -100,21 +102,21 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
 
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
 
-        Route::get('/', [OrderController::class, 'index'])
+        Route::get('/', [SaleController::class, 'index'])
             ->name('index');
 
-        Route::get('/create', [OrderController::class, 'create'])
+        Route::get('/create', [SaleController::class, 'create'])
             ->name('create');
 
-        Route::post('/store', [OrderController::class, 'store'])
+        Route::post('/store', [SaleController::class, 'store'])
             ->name('store');
 
-        Route::get('/show/{order}', [OrderController::class, 'show'])
+        Route::get('/show/{order}', [SaleController::class, 'show'])
             ->name('show');
 
         // FIX: Delete route moved inside {lang} group with Order model binding
         // so destroy() receives the Order model correctly and withLang() works
-        Route::delete('/{order}', [OrderController::class, 'destroy'])
+        Route::delete('/{order}', [SaleController::class, 'destroy'])
             ->name('destroy');
 
     });
@@ -245,4 +247,8 @@ Route::get('{lang}/orders/create', [OrderController::class, 'create'])
 
 Route::post('/orders/store', [OrderController::class, 'store']) ->name('orders.store');
 
-// Route::get('{lang}/orders/edit', [OrderController::class,'store'])->name('orders.edit');
+
+
+
+
+
