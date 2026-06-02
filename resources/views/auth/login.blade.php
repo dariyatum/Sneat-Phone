@@ -48,7 +48,7 @@
                                     <!-- Logo -->
                                         <div class="app-brand justify-content-center">
                                    
-                                            <img src="{{ $company->logo }}" alt="logo" width="100px"/>
+                                            <img src="{{ asset('images/company/' . $company->logo) }}" alt="logo" width="50">
                                         </div>
                                     <!-- /Logo -->
                                     <h4 class="mb-2 text-center">{{ $company->name ?? 'CMy Phone ShopE' }}</h4>

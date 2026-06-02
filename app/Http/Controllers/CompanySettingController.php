@@ -45,7 +45,7 @@ class CompanySettingController extends Controller
           $filename = $image->getClientOriginalName();
           $profileImage = $formattedNumber. "_" .md5($filename . time()) . "." . $image->getClientOriginalExtension();
           $image->move($destinationPath, $profileImage);
-          $data['logo'] = asset('images/company/' . $profileImage);
+          $data['logo'] = $profileImage;
         }
 
         $company->update($data);
