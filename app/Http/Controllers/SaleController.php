@@ -134,8 +134,9 @@ class SaleController extends Controller
                 ]);
         }
 
+        // FIX: Redirect to invoice detail page after completing sale
         return redirect()
-            ->route('sales.index', app()->getLocale())
+            ->route('sales.show', withLang(['order' => $order->id]))
             ->with('success', 'Sale completed successfully.');
     }
 
@@ -207,7 +208,7 @@ class SaleController extends Controller
         $order->delete();
 
         return redirect()
-            ->route('sale.index', app()->getLocale())
+            ->route('sales.index', withLang())
             ->with('success', 'Sale deleted successfully');
     }
 
@@ -260,7 +261,7 @@ class SaleController extends Controller
 
         $type = $request->type ?? 'download';
 
-    return view('sale.invoice-pdf', compact(
+        return view('sale.invoice-pdf', compact(
             'order',
             'order_detals',
             'currentDate',
