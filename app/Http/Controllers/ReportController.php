@@ -1046,9 +1046,10 @@ class ReportController extends Controller
                 $parameterNames['to_date'] = $filters['to_date'];
             }
         }
-    }else{
-      $query->whereDate('purchase_date', now()->toDateString());
-    }
+       
+    // }else{
+    //   $query->whereDate('purchase_date', now()->toDateString());
+    // }
 
       $totalProduct = $query->count();
       $totalSellingPrice = $query->sum('selling_price');
@@ -1072,4 +1073,5 @@ class ReportController extends Controller
             'currentDate' => $currentDate
         ]);
     }
+ }
 }

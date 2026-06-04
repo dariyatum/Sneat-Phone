@@ -107,13 +107,19 @@ class LoanController extends Controller
         $data['interest_remain'] = $request->duration * $request->amount_interest;
         $nextPaymentDate = date('Y-m-d', strtotime($request->date . ' +1 month'));
         $data['next_payment_date'] = $nextPaymentDate;
-        $loan = Loan::create($data);
-        $purchasedPrice = $loan->product->purchase_price;
-        $soldPrice = $loan->product->selling_price;
-        $phoneProfit = $soldPrice - $purchasedPrice;
-        $data['phone_profit'] = $phoneProfit;
-        $loan->update($data);
-        if ($file = $request->file('file')) {
+        $loan = Loan::create($data);  // line 110
+      //  HERE IS BUG
+        // $purchasedPrice = $loan->product->purchase_price;  // line 111
+
+        // $soldPrice = $loan->product->selling_price;         // line 112
+
+        // $phoneProfit = $soldPrice - $purchasedPrice;        // line 113
+
+        // $data['phone_profit'] = $phoneProfit;               // line 114
+
+        // $loan->update($data);                               // line 115
+                
+        if ($file = $request->file('file')) { // line 122
           $zipFileName = $this->uploadFileZip($loan, $file );
           $loan->file = $zipFileName;
           $loan->save();

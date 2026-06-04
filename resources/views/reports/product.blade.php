@@ -94,6 +94,7 @@
                           </thead>
                           <tbody class="table-border-bottom-0">
                               @forelse ($products as $product)
+                              dd($products as $product);
                                   <tr>
                                       <td><strong>{{ $product->id }}</strong></td>
                                       <td><strong>{{ $product->series_name }}</strong></td>
