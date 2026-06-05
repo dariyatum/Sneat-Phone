@@ -1,280 +1,197 @@
-<div class="card border-0 shadow-sm rounded-4">
-    <div class="card-body p-4">
+<div class="pi-card">
+    <div class="pi-body">
 
-        <h4 class="fw-bold text-secondary mb-4">Product Information</h4>
+        <h4 class="pi-heading">Product Information</h4>
 
-        <div class="row g-5 align-items-start">
+        {{-- Product Image --}}
+        <div style="margin-bottom:24px;">
+            <img 
+                src="{{ asset('images/product/' . $product->image) }}"
+                alt="Product Image"
+                style="width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid #e9ecef;box-shadow:0 2px 10px rgba(0,0,0,.08);display:block;"
+                onerror="this.src='{{ asset('/assets/img/blank-product.svg') }}'"
+            >
+        </div>
 
-            {{-- LEFT SIDE --}}
-            <div class="col-md-6">
+        {{-- Info Grid --}}
+        <div class="pi-grid">
 
-                {{-- Product Image --}}
-                <div class="mb-4">
-                    <img 
-                        src="{{ asset('images/product/' . $product->image) }}"
-                        alt="Product Image"
-                        class="rounded-3 border"
-                        style="width: 90px; height: 90px; object-fit: cover;"
-                        onerror="this.src='{{ asset('/assets/img/blank-product.svg') }}'"
-                    >
+            {{-- LEFT COLUMN --}}
+            <div class="pi-col">
+
+                <div class="pi-row">
+                    <span class="pi-label">PRODUCT NAME :</span>
+                    <span class="pi-value">{{ $product->product_name }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">PRODUCT CODE :</span>
+                    <span class="pi-value">{{ $product->product_code }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">BRAND :</span>
+                    <span class="pi-value">{{ $product->brand->name ?? '' }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">COLOR :</span>
+                    <span class="pi-value">{{ $product->color->name ?? '' }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">STORAGE :</span>
+                    <span class="pi-value">{{ $product->storage->name ?? '' }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">BATTERY PERCENTAGE :</span>
+                    <span class="pi-value">{{ $product->battery_percentage }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">PURCHASE DATE :</span>
+                    <span class="pi-value">{{ $product->purchase_date }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">SELLING PRICE :</span>
+                    <span class="pi-value">${{ $product->selling_price }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">PRODUCT NOTE :</span>
+                    <span class="pi-value">{{ $product->note }}</span>
                 </div>
 
-                <div class="product-info">
-
-                    <p>
-                        <span>PRODUCT NAME :</span>
-                        {{ $product->product_name }}
-                    </p>
-
-                    <p>
-                        <span>PRODUCT CODE :</span>
-                        {{ $product->product_code }}
-                    </p>
-
-                    <p>
-                        <span>BRAND :</span>
-                        {{ $product->brand->name ?? '' }}
-                    </p>
-
-                    <p>
-                        <span>COLOR :</span>
-                        {{ $product->color->name ?? '' }}
-                    </p>
-
-                    <p>
-                        <span>STORAGE :</span>
-                        {{ $product->storage->name ?? '' }}
-                    </p>
-
-                    <p>
-                        <span>BATTERY PERCENTAGE :</span>
-                        {{ $product->battery_percentage }}
-                    </p>
-
-                    <p>
-                        <span>PURCHASE DATE :</span>
-                        {{ $product->purchase_date }}
-                    </p>
-
-                    <p>
-                        <span>SELLING PRICE :</span>
-                        ${{ $product->selling_price }}
-                    </p>
-
-                    <p>
-                        <span>PRODUCT NOTE :</span>
-                        {{ $product->note }}
-                    </p>
-
-                </div>
             </div>
 
-            {{-- RIGHT SIDE --}}
-            <div class="col-md-6">
+            {{-- RIGHT COLUMN --}}
+            <div class="pi-col">
 
-                <div class="product-info mt-md-5">
-
-                    <p>
-                        <span>PRODUCT IMEI :</span>
-                        {{ $product->product_imei }}
-                    </p>
-
-                    {{-- CONDITION --}}
-                    <p>
-                        <span>CONDITION :</span>
-
+                <div class="pi-row">
+                    <span class="pi-label">PRODUCT IMEI :</span>
+                    <span class="pi-value">{{ $product->product_imei }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">CONDITION :</span>
+                    <span class="pi-value">
                         @if($product->condition == 1)
                             <span class="badge bg-primary">Used</span>
-
                         @elseif($product->condition == 2)
                             <span class="badge bg-secondary">New</span>
-
                         @elseif($product->condition == 3)
                             <span class="badge bg-success">Refurbished</span>
-
                         @else
                             <span class="badge bg-dark">Unknown</span>
                         @endif
-                    </p>
-
-                    <p>
-                        <span>SERIES :</span>
-                        {{ $product->series->name ?? '' }}
-                    </p>
-
-                    <p>
-                        <span>MODEL :</span>
-                        {{ $product->modelType->name ?? '' }}
-                    </p>
-
-                    {{-- TYPE OF MACHINE --}}
-                    <p>
-                        <span>TYPE OF MACHINE :</span>
-
+                    </span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">SERIES :</span>
+                    <span class="pi-value">{{ $product->series->name ?? '' }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">MODEL :</span>
+                    <span class="pi-value">{{ $product->modelType->name ?? '' }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">TYPE OF MACHINE :</span>
+                    <span class="pi-value">
                         @if($product->type_of_machine == 1)
                             <span class="badge bg-info">iCloud</span>
-
                         @elseif($product->type_of_machine == 2)
                             <span class="badge bg-warning">Unlock</span>
-
                         @elseif($product->type_of_machine == 3)
                             <span class="badge bg-dark">Original</span>
-
                         @else
                             <span class="badge bg-secondary">Unknown</span>
                         @endif
-                    </p>
-
-                    <p>
-                        <span>PRODUCT PERCENTAGE :</span>
-                        {{ $product->percentage }}
-                    </p>
-
-                    <p>
-                        <span>PURCHASE PRICE :</span>
-                        ${{ $product->purchase_price }}
-                    </p>
-
-                    {{-- STATUS --}}
-                    <p>
-                        <span>PRODUCT STATUS :</span>
-
-                        @if($product->status == 1)
-                            <span class="badge bg-success px-3 py-2 rounded-pill">
-                                Available
-                            </span>
-
-                        @elseif($product->status == 2)
-                            <span class="badge bg-danger px-3 py-2 rounded-pill">
-                                Sold
-                            </span>
-
-                        @elseif($product->status == 3)
-                            <span class="badge bg-warning px-3 py-2 rounded-pill">
-                                Pending
-                            </span>
-
-                        @else
-                            <span class="badge bg-dark px-3 py-2 rounded-pill">
-                                Unknown
-                            </span>
-                        @endif
-                    </p>
-
+                    </span>
                 </div>
-            </div>
+                <div class="pi-row">
+                    <span class="pi-label">PRODUCT PERCENTAGE :</span>
+                    <span class="pi-value">{{ $product->percentage }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">PURCHASE PRICE :</span>
+                    <span class="pi-value">${{ $product->purchase_price }}</span>
+                </div>
+                <div class="pi-row">
+                    <span class="pi-label">PRODUCT STATUS :</span>
+                    <span class="pi-value">
+                        @if($product->status == 1)
+                            <span class="badge bg-success px-3 py-2 rounded-pill">Available</span>
+                        @elseif($product->status == 2)
+                            <span class="badge bg-danger px-3 py-2 rounded-pill">Sold</span>
+                        @elseif($product->status == 3)
+                            <span class="badge bg-warning px-3 py-2 rounded-pill">Pending</span>
+                        @else
+                            <span class="badge bg-dark px-3 py-2 rounded-pill">Unknown</span>
+                        @endif
+                    </span>
+                </div>
 
+            </div>
         </div>
 
         {{-- Buttons --}}
-        <div class="mt-4 d-flex gap-2">
-
+        <div style="display:flex;gap:10px;margin-top:28px;">
             <a href="{{ route('products.index', withLang()) }}"
-               class="btn btn-light border px-4 rounded-3">
+               style="display:inline-block;padding:8px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;background:#fff;border:1px solid #d6dbe3;color:#6c7a92;">
                 Product Lists
             </a>
-
             <a href="{{ route('products.edit', withLang(['product' => $product->id])) }}"
-               class="btn btn-primary px-4 rounded-3 shadow-sm">
+               style="display:inline-block;padding:8px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;background:#7367f0;border:1px solid #7367f0;color:#fff;">
                 Edit
             </a>
-
         </div>
 
     </div>
 </div>
 
 <style>
-.card{
-    border-radius:12px;
-    border:1px solid #e9ecef;
+.pi-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    overflow: hidden;
 }
-
-.card-body{
-    padding:30px 35px;
+.pi-body {
+    padding: 30px 35px;
 }
-
-h4{
-    color:#6c7a92;
-    font-size:24px;
-    font-weight:700;
-    margin-bottom:30px;
+.pi-heading {
+    color: #6c7a92 !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    margin-bottom: 24px !important;
 }
-
-.product-info p{
-    margin-bottom:22px;
-    font-size:15px;
-    color:#6c7a92;
-    font-weight:600;
-    line-height:1.6;
+.pi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 48px;
 }
-
-.product-info p span:first-child{
-    font-size:13px;
-    font-weight:700;
-    color:#8b9bb4;
-    text-transform:uppercase;
-    letter-spacing:.5px;
+.pi-col {
+    display: flex;
+    flex-direction: column;
 }
-
-.product-info p:not(:has(span:first-child)){
-    color:#4f5d75;
+.pi-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 16px;
 }
-
-.product-info{
-    margin-top:10px;
+.pi-label {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #8b9bb4 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.6;
 }
-
-.product-info .badge{
-    font-size:13px;
-    padding:6px 12px;
-    border-radius:20px;
-    font-weight:600;
+.pi-value {
+    color: #4f5d75 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    line-height: 1.6;
 }
-
-img{
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-
-.btn-light{
-    background:#fff;
-    border:1px solid #d6dbe3;
-    color:#6c7a92;
-    font-weight:600;
-    min-width:120px;
-}
-
-.btn-light:hover{
-    background:#f8f9fa;
-}
-
-.btn-primary{
-    background:#7367f0;
-    border:none;
-    font-weight:600;
-    min-width:80px;
-}
-
-.btn-primary:hover{
-    background:#5d50e6;
-}
-
-.row.g-5{
-    --bs-gutter-x: 6rem;
-}
-
-@media (max-width:768px){
-
-    .card-body{
-        padding:20px;
-    }
-
-    .product-info{
-        margin-top:0;
-    }
-
-    .row.g-5{
-        --bs-gutter-x:1.5rem;
-    }
+@media (max-width: 768px) {
+    .pi-body { padding: 20px; }
+    .pi-grid { grid-template-columns: 1fr; }
 }
 </style>
