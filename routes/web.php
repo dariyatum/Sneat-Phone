@@ -1,5 +1,5 @@
 <?php
-
+// MAO SREYPOV
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
@@ -237,14 +237,10 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
 // for sidebar
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 
-
 // for order
-Route::get('{lang}/orders/create', [OrderController::class, 'create'])
-    ->name('orders.create');
+Route::get('{lang}/orders/create', [OrderController::class, 'create'])->name('orders.create');
 
-Route::get('{lang}/orders/create', [OrderController::class, 'create'])
-    ->name('orders.create');
-
+// Used to send new data securely to the server
 Route::post('/orders/store', [OrderController::class, 'store']) ->name('orders.store');
 
 

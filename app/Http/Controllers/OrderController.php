@@ -1,4 +1,5 @@
 <?php
+// MAO SREYPOV
 
 namespace App\Http\Controllers;
 
@@ -14,106 +15,141 @@ use App\Models\Cart;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
-
-// public function create()
-// {
-//     return view('orders.create');
-// }
-
-
-// public function create()
-// {
-//     $products = Product::all();
-//     return view('orders.create', compact('products'));
-// }
-
-
-
-
-
-public function create()
-{
-    $products = Product::all();
-
-    $cartItems = Cart::with('product')->where('user_id', auth()->id()) ->get();
-
-    return view('orders.create', compact(
-        'products',
-        'cartItems'
-    ));
-}
-
-public function store(Request $request)
-{
-    // all submit order logic here
-}
-
-  function __construct()
-  {
-      $this->middleware('auth');
-      $this->middleware('permission:order-list|order-create|order-edit|order-delete', ['only' => ['index','store']]);
-      $this->middleware('permission:order-create', ['only' => ['create','store']]);
-      $this->middleware('permission:order-edit', ['only' => ['edit','update']]);
-      $this->middleware('permission:order-delete', ['only' => ['destroy']]);
-  }
-  /**
-   * Display a listing of the resource.
-   */
-  public function index(Request $request)
-  {
-    
-    $parameterNames = [];
-    if ($request->search) {
-        $filters = $request->only(['customer', 'from_date', 'to_date']);
-
-        if (!empty($filters['customer'])) {
-            $query->where('customer_id', $filters['customer']);
-            $parameterNames['customer'] = $filters['customer'];
-        }
-
-        if (!empty($filters['from_date']) && !empty($filters['to_date'])) {
-            // Both from_date and to_date are provided
-            $query->whereBetween('order_date', [$filters['from_date'], $filters['to_date']]);
-            $parameterNames['from_date'] = $filters['from_date'];
-            $parameterNames['to_date'] = $filters['to_date'];
-        } elseif (!empty($filters['from_date'])) {
-            // Only from_date is provided
-            $query->where('order_date', '>=', $filters['from_date']);
-            $parameterNames['from_date'] = $filters['from_date'];
-        } elseif (!empty($filters['to_date'])) {
-            // Only to_date is provided
-            $query->where('order_date', '<=', $filters['to_date']);
-            $parameterNames['to_date'] = $filters['to_date'];
-        }
+    /**
+     * Constructor enforcing middleware roles and permissions.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:order-list|order-create|order-edit|order-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:order-create', ['only' => ['create','store']]);
+        $this->middleware('permission:order-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:order-delete', ['only' => ['destroy']]);
     }
-  }
 
     /**
      * Display a listing of the resource.
      */
+    public function index(Request $request)
+    {
+        $query = Order::query();
+        $parameterNames = [];
+        
+        if ($request->search) {
+            $filters = $request->only(['customer', 'from_date', 'to_date']);
 
+            if (!empty($filters['customer'])) {
+                $query->where('customer_id', $filters['customer']);
+                $parameterNames['customer'] = $filters['customer'];
+            }
+
+            if (!empty($filters['from_date']) && !empty($filters['to_date'])) {
+                $query->whereBetween('order_date', [$filters['from_date'], $filters['to_date']]);
+                $parameterNames['from_date'] = $filters['from_date'];
+                $parameterNames['to_date'] = $filters['to_date'];
+            } elseif (!empty($filters['from_date'])) {
+                $query->where('order_date', '>=', $filters['from_date']);
+                $parameterNames['from_date'] = $filters['from_date'];
+            } elseif (!empty($filters['to_date'])) {
+                $query->where('order_date', '<=', $filters['to_date']);
+                $parameterNames['to_date'] = $filters['to_date'];
+            }
+        }
+
+        // Fetch paginated results for index if needed, otherwise returns query state
+        $orders = $query->latest()->paginate(10);
+        return view('orders.index', compact('orders', 'parameterNames'));
+    }
 
     /**
      * Show the form for creating a new resource.
      */
+    public function create()
+    {
+        // 1. Fetch products and customers from the database to populate the UI view dropdowns and grids
+        $products = Product::all();
+        $customers = Customer::all();
 
+        // 2. Fetch authenticated user's persistent cart items if necessary
+        $cartItems = Cart::with('product')->where('user_id', auth()->id())->get();
+
+        // 3. Return view matching structure with all required variables passed safely
+        return view('orders.create', compact(
+            'products',
+            'customers',
+            'cartItems'
+        ));
+    }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new created resource in storage
      */
+    public function store(Request $request)
+    {
+        // Validate request data
+        $request->validate([
+            'customer_id' => 'required',
+            'items'       => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity'   => 'required|integer|min:1',
+        ]);
 
+        return DB::transaction(function () use ($request) {
+            
+            // Calculate order total
+            $totalAmount = 0;
+            foreach ($request->items as $item) {
+                $product = Product::findOrFail($item['product_id']);
+                $totalAmount += ($product->selling_price * $item['quantity']);
+            }
+
+            // Create main order record
+            $order = Order::create([
+                'customer_id'    => $request->customer_id,
+                'employee_id'    => auth()->id() ?? 1, 
+                'status'         => Order::STATUS_ACTIVE,
+                'total_amount'   => $totalAmount,
+                'payment_status' => Order::PAYMENT_STATUS_PAID,
+                'payment_type'   => Order::PAYMENT_TYPE_CASH,
+                'order_date'     => now(),
+                'note'           => $request->note ?? 'Counter POS Terminal Sale',
+            ]);
+
+            // Create order items details records
+            foreach ($request->items as $item) {
+                $product = Product::findOrFail($item['product_id']);
+
+                OrderDetail::create([
+                    'order_id'   => $order->id,
+                    'product_id' => $product->id,
+                    'unit_price' => $product->selling_price, 
+                    'updated_at' => now(),
+                    'created_at' => now(),
+                ]);
+            }
+
+            // Return success response with redirect path
+            return response()->json([
+                'status'       => 'success',
+                'message'      => 'Order created successfully!',
+                'order_id'     => $order->id,
+                'redirect_url' => route('sales.index', app()->getLocale())
+            ], 200);
+        });
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(string $lang, Order $order)
     {
-        $order = $order->with('orderDetails', 'customer', 'employee')->findOrfail($order->id);
+        $order = $order->with('orderDetails', 'customer', 'employee')->findOrFail($order->id);
         $order_detals = OrderDetail::where('order_id', $order->id)->with('product')->get();
         return view('orders.show', compact('order', 'order_detals'));
     }
@@ -129,7 +165,7 @@ public function store(Request $request)
                 return response()->json(['message' => 'Product not found.'], 404);
             }
         }
-        return response()->json(['message' => 'Submiting Order'], 201);
+        return response()->json(['message' => 'Submitting Order'], 201);
     }
 
     /**
@@ -156,7 +192,7 @@ public function store(Request $request)
      */
     public function invoice(string $lang, Order $order)
     {
-        $order = $order->with('orderDetails', 'customer', 'employee')->findOrfail($order->id);
+        $order = $order->with('orderDetails', 'customer', 'employee')->findOrFail($order->id);
         $order_detals = OrderDetail::where('order_id', $order->id)->with('product')->get();
         return view('orders.invoice', compact('order', 'order_detals'));
     }
@@ -167,12 +203,10 @@ public function store(Request $request)
     public function invoicePdf(Request $request, string $lang, Order $order)
     {
         $currentDate = Carbon::now()->format('Y-m-d');
-        $order = $order->with('orderDetails', 'customer', 'employee')->findOrfail($order->id);
+        $order = $order->with('orderDetails', 'customer', 'employee')->findOrFail($order->id);
         $order_detals = OrderDetail::where('order_id', $order->id)->with('product')->get();
         $file_pdf = 'invoice-' . str_pad($order->id, 5, '0', STR_PAD_LEFT) . '.pdf';
         $type = $request->type ?? 'download';
         return view('orders.invoice-pdf', compact('order', 'order_detals', 'currentDate', 'file_pdf', 'type'));
     }
-
-    
 }
