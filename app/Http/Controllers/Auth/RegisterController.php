@@ -69,6 +69,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:20', new LowercaseWithUnderscore, 'unique:users'],
             'email' => ['nullable', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'max:20'],
             'position' => ['required'],
             'password' => ['required', 'string', 'min:8', 'confirmed']
         ]);
@@ -86,6 +87,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'] ?? $data['name'].'@example.com',
+            'phone'=>$data['phone'],
             'password' => Hash::make($data['password']),
         ]);
 
@@ -109,10 +111,9 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
-
         // $this->guard()->login($user);
 
         return $this->registered($request, $user)
-                        ?: redirect()->route('users.edit', withLang(['id' => $user->id]));
+                        ?: redirect()->route('employees.index', withLang(['id' => $user->id]));
     }
 }

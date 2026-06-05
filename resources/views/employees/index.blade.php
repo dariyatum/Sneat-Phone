@@ -48,9 +48,9 @@
                                     </li>
                                 </ul>
                             </td>
-                            <td><strong>{{ $user->employee->name ?? ''}}</strong></td>
-                            <td>{{ $user->employee->email ?? ''}}</td>
-                            <td>{{ $user->employee->phone ?? '' }}</td>
+                            <td><strong>{{ $user->name ?? ''}}</strong></td>
+                            <td>{{ $user->email ?? ''}}</td>
+                            <td>{{ $user->phone ?? '' }}</td>
                             <td>{{ $user->employee->position ?? ''}}</td>
                             <td>{!! $user->employee->statusname ?? ''!!}</td>
                             @can('user-edit')

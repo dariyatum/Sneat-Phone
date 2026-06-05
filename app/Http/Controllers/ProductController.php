@@ -155,7 +155,7 @@ public function show($lang, $id)
     $colors = Color::pluck('name', 'id');
     $modelTypes = ModelType::pluck('name', 'id');
     $storage = Storage::pluck('name', 'id');
-
+    $network = Network::pluck('name', 'id');
     $type_of_machines = Product::TYPE_OF_MACHINE;
     $conditions = Product::CONDITION;
     $status = Product::getStatuses();
@@ -253,13 +253,14 @@ public function update(ProductRequest $request, string $lang, Product $product)
     return redirect()->route('products.index', withLang());
   }
 
-  public function create()
+public function create()
 {
     $brands = Brand::pluck('name', 'id');
     $series = Series::pluck('name', 'id');
     $colors = Color::pluck('name', 'id');
     $modelTypes = ModelType::pluck('name', 'id');
     $storage = Storage::pluck('name', 'id');
+    $networks = Network::pluck('name', 'id');
 
     $conditions = Product::CONDITION;
     $status = Product::getStatuses();
@@ -271,6 +272,7 @@ public function update(ProductRequest $request, string $lang, Product $product)
         'colors',
         'modelTypes',
         'storage',
+        'networks',
         'conditions',
         'status',
         'type_of_machines'

@@ -185,25 +185,96 @@
 </div>
 
 <style>
-    .product-info p {
-        margin-bottom: 18px;
-        font-size: 14px;
-        color: #6c757d;
-        font-weight: 500;
+.card{
+    border-radius:12px;
+    border:1px solid #e9ecef;
+}
+
+.card-body{
+    padding:30px 35px;
+}
+
+h4{
+    color:#6c7a92;
+    font-size:24px;
+    font-weight:700;
+    margin-bottom:30px;
+}
+
+.product-info p{
+    margin-bottom:22px;
+    font-size:15px;
+    color:#6c7a92;
+    font-weight:600;
+    line-height:1.6;
+}
+
+.product-info p span:first-child{
+    font-size:13px;
+    font-weight:700;
+    color:#8b9bb4;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.product-info p:not(:has(span:first-child)){
+    color:#4f5d75;
+}
+
+.product-info{
+    margin-top:10px;
+}
+
+.product-info .badge{
+    font-size:13px;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:600;
+}
+
+img{
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.btn-light{
+    background:#fff;
+    border:1px solid #d6dbe3;
+    color:#6c7a92;
+    font-weight:600;
+    min-width:120px;
+}
+
+.btn-light:hover{
+    background:#f8f9fa;
+}
+
+.btn-primary{
+    background:#7367f0;
+    border:none;
+    font-weight:600;
+    min-width:80px;
+}
+
+.btn-primary:hover{
+    background:#5d50e6;
+}
+
+.row.g-5{
+    --bs-gutter-x: 6rem;
+}
+
+@media (max-width:768px){
+
+    .card-body{
+        padding:20px;
     }
 
-    .product-info p span {
-        font-weight: 700;
-        color: #5a6474;
-        margin-right: 5px;
+    .product-info{
+        margin-top:0;
     }
 
-    .btn-primary {
-        background: #6c63ff;
-        border: none;
+    .row.g-5{
+        --bs-gutter-x:1.5rem;
     }
-
-    .btn-primary:hover {
-        background: #5a52e0;
-    }
+}
 </style>
