@@ -1,5 +1,9 @@
-<div class="card border-0 shadow-sm rounded-4">
-    <div class="card-body p-4">
+@extends('layouts.app')
+
+@section('content')
+
+<div class="pi-card">
+    <div class="pi-body">
 
         <h4 class="fw-bold text-secondary mb-4">Product Information</h4>
 
@@ -185,25 +189,63 @@
 </div>
 
 <style>
-    .product-info p {
-        margin-bottom: 18px;
-        font-size: 14px;
-        color: #6c757d;
-        font-weight: 500;
-    }
-
-    .product-info p span {
-        font-weight: 700;
-        color: #5a6474;
-        margin-right: 5px;
-    }
-
-    .btn-primary {
-        background: #6c63ff;
-        border: none;
-    }
-
-    .btn-primary:hover {
-        background: #5a52e0;
-    }
+.pi-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+.pi-body {
+    padding: 30px 35px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.pi-heading {
+    color: #6c7a92 !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    margin-bottom: 24px !important;
+}
+.pi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 48px;
+    width: 100%;
+}
+.pi-col {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.pi-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+.pi-label {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #8b9bb4 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.6;
+}
+.pi-value {
+    color: #4f5d75 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    line-height: 1.6;
+}
+@media (max-width: 768px) {
+    .pi-body { padding: 20px; }
+    .pi-grid { grid-template-columns: 1fr; }
+}
 </style>
+
+@endsection
