@@ -192,6 +192,9 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
         Route::get('/', [LoanPaymentController::class, 'index'])->name('index');
         Route::get('/create', [LoanPaymentController::class, 'create'])->name('create');                                                                                                                                                      
         Route::post('/', [LoanPaymentController::class, 'store'])->name('store');
+        
+        Route::get('/late', [LoanPaymentController::class, 'late'])->name('late');
+
         Route::get('/{loanPayment}/edit', [LoanPaymentController::class, 'edit'])->name('edit');
         Route::get('/{loanPayment}/invoice', [LoanPaymentController::class, 'invoice'])->name('invoice');
         Route::get('/{loanPayment}/invoice/pdf', [LoanPaymentController::class, 'invoicePdf'])->name('invoice.pdf');
