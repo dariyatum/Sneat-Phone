@@ -141,15 +141,24 @@ class EmployeeController extends Controller
     }
 
     public function updatePassword(Request $request, $lang, $id)
-
     {
-
         $request->validate([
+            'current_password' => 'required',
             'new_password' => 'required|confirmed',
         ]);
-        $user = User::findOrfail($id);
-        $user->password = Hash::make($request->new_password);
+        $user = User::findOrFail($id);
+        if (!Hash::check($request->current_password, $user->password))
+        {
+            return back()->withErrors([
+                'current_password' => 'Current password is incorrect.'
+            ])->withInput();
+        }
+
+        $user->password =  Hash::make($request->new_password);
         $user->save();
-        return redirect()->route('users.edit.profile', withLang())->with('success', 'Password updated successfully');
+
+        return redirect()
+            ->route('users.edit.profile', withLang(['id' => $user->id]))
+            ->with('success', 'Password updated successfully');
     }
 }

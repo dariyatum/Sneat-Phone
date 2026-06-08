@@ -41,6 +41,23 @@
                         </div>
                         <hr class="my-0" />
                         <div class="card-body">
+                                                        <div class="mb-3 form-password-toggle col-6">
+                                <label for="current-password" class="form-label">Current Password</label>
+                                <div class="input-group input-group-merge">
+                                     <input
+                                            type="password"
+                                            name="current_password"
+                                            class="form-control @error('current_password') is-invalid @enderror">
+
+                                @error('current_password')
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                                    
+                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                </div>
+                            </div>
                             <div class="mb-3 form-password-toggle col-6">
                                   <label for="new-password" class="form-label">New Password</label>
                                   <div class="input-group input-group-merge">
@@ -54,7 +71,7 @@
                                   </div>
                             </div>
                             <div class="mb-3 form-password-toggle col-6">
-                                <label for="password-confirm" class="form-label">Confriem Password</label>
+                                <label for="password-confirm" class="form-label">Confirm Password</label>
                                 <div class="input-group input-group-merge">
                                     <input id="password-confirm" type="password" class="form-control @error('new_password_confirmation') is-invalid @enderror" name="new_password_confirmation" required autocomplete="password-confirm" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password-confirm">
                                     @error('new_password_confirmation')

@@ -43,18 +43,32 @@
                         </div>
                         <hr class="my-0" />
                         <div class="card-body">
-                            <div class="mb-3 form-password-toggle col-6">
-                                <label for="current-password" class="form-label">Current Password</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="current-password" type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" required autocomplete="current-password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="current-password">
-                                    @error('current_password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                                </div>
-                            </div>
+                         <div class="mb-3 form-password-toggle col-6">
+                    <label for="current-password" class="form-label">
+                        Current Password
+                    </label>
+
+                    <div class="input-group input-group-merge">
+                        <input
+                            id="current-password"
+                            type="password"
+                            name="current_password"
+                            class="form-control @error('current_password') is-invalid @enderror"
+                            required
+                            placeholder="&#xb7;&#xb7;"
+                        >
+
+                        <span class="input-group-text cursor-pointer">
+                            <i class="bx bx-hide"></i>
+                        </span>
+                    </div>
+
+                    @error('current_password')
+                        <div class="text-danger mt-1">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
                             <div class="mb-3 form-password-toggle col-6">
                                   <label for="new-password" class="form-label">New Password</label>
                                   <div class="input-group input-group-merge">
