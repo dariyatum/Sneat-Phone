@@ -99,6 +99,14 @@ class ReportController extends Controller
         $statusID = Product::STATUS_ID_AVAILABLE;
         $statusName = $status[$statusID];
         $parameterNames = [];
+        // {{ BUG HERE }}
+        $query = Series::leftJoin('products', 'series.id', '=', 'products.series_id')
+            ->leftJoin('brands', 'series.brand_id', '=', 'brands.id')
+            ->select(
+                'series.id as series_id',
+                'series.name as series_name',
+                'brands.name as brand_name'
+            );
         // Start building the query
         if ($request->search) {
         $parameterNames['search'] = true;

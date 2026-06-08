@@ -191,6 +191,13 @@ class LoanPaymentController extends Controller
         return redirect()->route('loans.payments.index', withLang())->with('success', 'Loan Payment updated successfully');
     }
 
+    public function destroy(string $lang, LoanPayment $loanPayment)
+    {
+      $loanPayment->delete();
+
+      return redirect()->route('loans.payments.index', withLang())->with('success', 'Loan Payment deleted successfully');
+    }
+
     public function late(Request $request)
     {
         $query = Loan::query()->latePayment();
