@@ -16,11 +16,12 @@ class NetworkController extends Controller
         },
         'products as products_status_sold_count' => function ($query) {
             $query->where('status', 2);
-        },
+         },
         'products as products_status_loan_count' => function ($query) {
             $query->where('status', 3);
         },
-      ])->get();
+
+      ])->get();    
 
         return view('network.index', ['networks' => $networks]);
     }

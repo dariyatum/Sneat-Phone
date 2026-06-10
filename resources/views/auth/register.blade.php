@@ -3,133 +3,182 @@
 @section('content')
 <!-- Content -->
 <div class="container-fluid flex-grow-1 container-p-y">
-    <!-- Basic Layout -->
+
     <div class="row">
         <div class="col-xl">
             <div class="card mb-4">
+
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Add New Account</h5>
                 </div>
+
                 <div class="card-body">
+
                     <form method="POST" action="{{ route('register', withLang()) }}">
                         @csrf
+
+                        <!-- NAME -->
                         <div class="mb-3">
-                            <label class="form-label" for="fullname">{{ __('Login Name') }}</label>
+                            <label class="form-label" for="name">Login Name</label>
+
                             <div class="input-group input-group-merge">
-                                <span id="fullname2" class="input-group-text">
+                                <span class="input-group-text">
                                     <i class="bx bx-user"></i>
                                 </span>
+
                                 <input
                                     type="text"
-                                    id="fullname"
+                                    id="name"
                                     name="name"
                                     value="{{ old('name') }}"
                                     class="form-control @error('name') is-invalid @enderror"
                                     placeholder="Full Name"
-                                    aria-label="Full Name"
-                                    aria-describedby="fullname2"
                                     required
                                     autocomplete="name"
                                     autofocus
                                 />
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
                             </div>
-                            <div class="form-text">You can use lowercase letters, numbers & underscores</div>
+
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
+
+                        <!-- EMAIL -->
                         <div class="mb-3">
                             <label class="form-label" for="email">Email</label>
+
                             <div class="input-group input-group-merge">
-                                <span id="email2" class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                <span class="input-group-text">
+                                    <i class="bx bx-envelope"></i>
+                                </span>
+
                                 <input
                                     type="email"
                                     id="email"
                                     name="email"
+                                    value="{{ old('email') }}"
                                     class="form-control @error('email') is-invalid @enderror"
-                                    placeholder="riscydo"
-                                    aria-label="riscydo"
-                                    aria-describedby="email2"
+                                    placeholder="example@email.com"
+                                    required
                                 />
-                                <span id="basic-icon-default-email2" class="input-group-text">@example.com</span>
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
                             </div>
-                            <div class="form-text">You can use letters, numbers & periods</div>
+
+                            @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
+                        <!-- PHONE -->
+                        <div class="mb-3">
+                            <label class="form-label" for="phone">Phone</label>
+
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text">
+                                    <i class="bx bx-phone"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    value="{{ old('phone') }}"
+                                    class="form-control @error('phone') is-invalid @enderror"
+                                    placeholder="012345678"
+                                    required
+                                />
+                            </div>
+
+                            @error('phone')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <!-- POSITION -->
                         <div class="mb-3">
                             <label class="form-label" for="position">Position</label>
+
                             <div class="input-group input-group-merge">
-                                <span id="email2" class="input-group-text"><i class="bx bx-envelope"></i></span>
-                                <select id="position" class="select2 form-select @error('position') is-invalid @enderror" name="position">
-                                    @foreach ($roles as $key => $value)
-                                        <option value="{{ $key }}" @if(old('position', $user->employee->position_id ?? '') == $key) selected @endif>{{ $value }}</option>
+                                <span class="input-group-text">
+                                    <i class="bx bx-briefcase"></i>
+                                </span>
+
+                                <select
+                                    id="position"
+                                    name="position"
+                                    class="form-select @error('position') is-invalid @enderror"
+                                >
+                                    <option value="">Select Position</option>
+
+                                    @foreach($roles as $key => $value)
+                                        <option value="{{ $key }}"
+                                            {{ old('position') == $key ? 'selected' : '' }}>
+                                            {{ $value }}
+                                        </option>
                                     @endforeach
                                 </select>
-                                @error('position')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
                             </div>
+
+                            @error('position')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <div class="mb-3 form-password-toggle">
-                            <label class="form-label" for="password">{{ __('Password') }}</label>
+
+                        <!-- PASSWORD -->
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Password</label>
+
                             <div class="input-group input-group-merge">
-                                <span id="password2" class="input-group-text">
+                                <span class="input-group-text">
                                     <i class="bx bx-key"></i>
                                 </span>
+
                                 <input
                                     type="password"
                                     id="password"
-                                    class="form-control @error('password') is-invalid @enderror"
-                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-label="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-describedby="password2"
                                     name="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    placeholder="••••••••"
                                     required
                                     autocomplete="new-password"
                                 />
-                                <input id="new-password" type="password" class="form-control @error('new_password') is-invalid @enderror" name="new_password" required autocomplete="new-password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="new-password">
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
+
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <div class="mb-3 form-password-toggle">
-                            <label class="form-label" for="password-confirm">{{ __('Confirm Password') }}</label>
+
+                        <!-- CONFIRM PASSWORD -->
+                        <div class="mb-3">
+                            <label class="form-label" for="password_confirmation">Confirm Password</label>
+
                             <div class="input-group input-group-merge">
-                                <span id="password-confirm2" class="input-group-text">
+                                <span class="input-group-text">
                                     <i class="bx bx-key"></i>
                                 </span>
+
                                 <input
                                     type="password"
-                                    id="password-confirm"
-                                    class="form-control form-control"
-                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-label="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-describedby="password-confirm2"
+                                    id="password_confirmation"
                                     name="password_confirmation"
+                                    class="form-control"
+                                    placeholder="••••••••"
                                     required
                                     autocomplete="new-password"
                                 />
-                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">{{ __('Register') }}</button>
+
+                        <!-- SUBMIT -->
+                        <button type="submit" class="btn btn-primary">
+                            Register
+                        </button>
+
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
+
 </div>
-<!-- / Content -->
 @endsection

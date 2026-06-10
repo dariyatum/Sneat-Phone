@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="container py-4">
 
     <div class="card shadow-sm border-0 rounded-4">
@@ -222,20 +221,20 @@
                         <div class="mb-3">
                             <label class="form-label">Network</label>
 
-                            <select name="network"
-                                    class="form-select @error('network') is-invalid @enderror">
+                            <select name="network_id"
+                                    class="form-select @error('network_id') is-invalid @enderror">
 
                                 <option value="">Select Network</option>
 
-                                @foreach($network ?? [] as $id => $name)
+                                @foreach($networks as $id => $name)
                                     <option value="{{ $id }}"
-                                        {{ old('network') == $id ? 'selected' : '' }}>
+                                        {{ old('network_id') == $id ? 'selected' : '' }}>
                                         {{ $name }}
                                     </option>
                                 @endforeach
                             </select>
 
-                            @error('network')
+                            @error('network_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

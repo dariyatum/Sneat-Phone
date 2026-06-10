@@ -99,6 +99,14 @@ class ReportController extends Controller
         $statusID = Product::STATUS_ID_AVAILABLE;
         $statusName = $status[$statusID];
         $parameterNames = [];
+        // {{ BUG HERE }}
+        $query = Series::leftJoin('products', 'series.id', '=', 'products.series_id')
+            ->leftJoin('brands', 'series.brand_id', '=', 'brands.id')
+            ->select(
+                'series.id as series_id',
+                'series.name as series_name',
+                'brands.name as brand_name'
+            );
         // Start building the query
         if ($request->search) {
         $parameterNames['search'] = true;
@@ -1046,9 +1054,10 @@ class ReportController extends Controller
                 $parameterNames['to_date'] = $filters['to_date'];
             }
         }
-    }else{
-      $query->whereDate('purchase_date', now()->toDateString());
-    }
+       
+    // }else{
+    //   $query->whereDate('purchase_date', now()->toDateString());
+    // }
 
       $totalProduct = $query->count();
       $totalSellingPrice = $query->sum('selling_price');
@@ -1072,4 +1081,5 @@ class ReportController extends Controller
             'currentDate' => $currentDate
         ]);
     }
+ }
 }

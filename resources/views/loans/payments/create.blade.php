@@ -1,181 +1,27 @@
 @extends('layouts.app')
+
 @push('styles')
-@endpush
-
-@section('content')
-<!-- Content wrapper -->
-<div class="content-wrapper">
-    <!-- Content -->
-    <div class="container-fluid flex-grow-1 container-p-y">
-        <div class="row">
-            <div class="col-md-12">
-              <form id="formLoanPaymentRegister" method="POST" action="{{ route('loans.payments.store', withLang()) }}" enctype="multipart/form-data">
-                @csrf
-                <div class="card mb-4">
-                    <h5 class="card-header">{{__('loan.register')}}</h5>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="loan_id">{{__('loan.no')}}</label>
-                                @if(isset($loanPayment->id))
-                                  <input type="text" class="form-control" value="{{ $loanPayment->number }} ({{ $loanPayment->customer->name }})" disabled />
-                                  <input type="hidden" class="form-control" value="{{ $loanPayment->id }}" id="loan_id" name="loan_id" data-value="[{{ $loanPayment->monthly_payment }}, {{ $loanPayment->remain }}, {{ $loanPayment->amount_paying_off }}]" data-date="{{ $loanPayment->next_payment_date }}"/>
-                                @else
-                                  <select id="loan_id" class="select2 form-select @error('loan_id') is-invalid @enderror" name="loan_id">
-                                    <option value="" disabled selected>{{__('common.lbl_select')}}</option>
-                                    @foreach ($loans as $loan)
-                                        <option></option>
-                                        <option  value="{{ $loan->id }}" @if(old('loan_id') == $loan->id) selected @endif data-value="[{{ $loan->monthly_payment }}, {{ $loan->remain }}, {{ $loan->amount_paying_off }}]" data-date="{{ $loan->next_payment_date }}">{{ $loan->number }} ( {{ $loan->customer->name }} ) | ( {{ setToStringDolla($loan->payable_amount) }} )</option>
-                                    @endforeach
-                                </select>
-                                @endif
-                                @error('loan_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label class="form-label" for="payment_status">{{__('loan.payment.status')}}</label>
-                              <select id="status" class="select2 form-select @error('payment_status') is-invalid @enderror" name="payment_status">
-                                  <option value="" disabled selected>{{__('common.lbl_select')}}</option>
-                                  @foreach ($statuOptions as $key => $value)
-                                      <option value="{{ $key }}" @if(old('payment_status') == $key) selected @endif> {{ $value }} </option>
-                                  @endforeach
-                              </select>
-                              @error('payment_status')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                          </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label class="form-label" for="loan_date">{{__('loan.payment.due_date')}}</label>
-                              <input class="form-control @error('date') is-invalid @enderror" type="date" value="{{ old('date', $currentDate) }}" id="loan_date" name="date" readonly/>
-                              @error('date')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                          </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="payment_type">{{__('loan.payment.types')}}</label>
-                                <select id="payment_type" class="select2 form-select @error('payment_type') is-invalid @enderror" name="payment_type">
-                                    @foreach ($typOptions as $key => $value)
-                                        <option value="{{ $key }}" @if(old('payment_type') == $key) selected @endif>{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                                @error('payment_type')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="mb-3 col-md-6">
-                              <label class="form-label" for="amount">{{__('loan.amount')}}</label>
-                                <div class="input-group input-group-merge">
-                                  <input readonly class="form-control @error('amount') is-invalid @enderror" type="text" value="{{ old('amount', 0) }}" id="amount" name="amount"/>
-                                  <span class="input-group-text">$</span>
-                                  @error('amount')
-                                      <span class="invalid-feedback" role="alert">
-                                          <strong>{{ $message }}</strong>
-                                      </span>
-                                  @enderror
-                                </div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label class="form-label" for="remain">{{__('loan.payment.remain')}}</label>
-                                <div class="input-group input-group-merge">
-                                  <input readonly class="form-control @error('remain') is-invalid @enderror" type="text" value="{{ old('remain', 0) }}" id="remain" name="remain"/>
-                                  <span class="input-group-text">$</span>
-                                  @error('remain')
-                                      <span class="invalid-feedback" role="alert">
-                                          <strong>{{ $message }}</strong>
-                                      </span>
-                                  @enderror
-                                </div>
-                            </div>
-                            <div class="mb-3 col-md-12">
-                                <label class="form-label" for="note">{{__('loan.payment.note')}}</label>
-                                <textarea id="note" class="form-control" name="note">{{ old('note') }}</textarea>
-                            </div>
-                        </div>
-
-                        <div class="mt-2">
-                            <button type="submit" class="btn btn-primary me-2">{{__('button.save')}}</button>
-                            <button type="reset" class="btn btn-outline-secondary">{{__('button.cancel')}}</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            </div>
-        </div>
-    </div>
-    <!-- / Content -->
-</div>
-<!-- Content wrapper -->
-@endsection
-@push('script')
-@if(isset($loanPayment->id))
-<script>
-    $(document).ready(function() {
-        $('#status').change(function() {
-            var selectedValue = $(this).val();
-            var loanNoDataValue = $('#loan_id').data('value');
-            if (selectedValue == 2) {
-                $('#amount').val(loanNoDataValue[2]);
-                $('#remain').val(loanNoDataValue[2]);
-            }else{
-                $('#amount').val(loanNoDataValue[0]);
-                $('#remain').val(loanNoDataValue[1] - loanNoDataValue[0]);
-            }
-        });
-        $('#loan_date').val($('#loan_id').data('date'));
-    });
-</script>
-@else
-<script>
-  $(document).ready(function() {
-      $('#loan_id').change(function() {
-          var selectedValue = $(this).val();
-          var loanNoDataValue = $('option:selected', this).data('value');
-          if ($('#status').val() == 2) {
-              $('#amount').val(loanNoDataValue[2]);
-              $('#remain').val(loanNoDataValue[2]);
-          }else{
-              $('#amount').val(loanNoDataValue[0]);
-              $('#remain').val(loanNoDataValue[1] - loanNoDataValue[0]);
-          }
-
-          $('#loan_date').val($('option:selected', this).data('date'));
-      });
-
-      $('#status').change(function() {
-          var selectedValue = $(this).val();
-          var loanNoDataValue = $('option:selected', '#loan_id').data('value');
-          if (selectedValue == 2) {
-              $('#amount').val(loanNoDataValue[2]);
-              $('#remain').val(loanNoDataValue[2]);
-          }else{
-              $('#amount').val(loanNoDataValue[0]);
-              $('#remain').val(loanNoDataValue[1] - loanNoDataValue[0]);
-          }
-      });
-  });
-</script>
-@endif
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
+<!-- <style>
+    /* Prevent text selections to make the POS UI feel like a native desktop app */
+    .pos-window { user-select: none; }
+    
+    /* Custom thin scrollbar for a cleaner look */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
 
-<style>
-    .select2{
+    /* Your custom Admin Select2 Form Layout Engine elements overrides */
+    .select2 {
         width: 100% !important;
         padding: .4375rem .875rem;
         font-size: 0.9375rem;
@@ -185,28 +31,296 @@
         appearance: none;
         background-color: #fff;
         background-clip: padding-box;
-        border: var(--bs-border-width) solid #d9dee3;
+        border: 1px solid #d9dee3 !important;
         border-radius: var(--bs-border-radius);
-        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     }
-    .select2-container--default .select2-selection--single{
-        border: 0px;
+    .select2-container--default .select2-selection--single {
+        border: 0px !important;
     }
-    .select2-container--default .select2-selection--single .select2-selection__arrow{
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
         top: 8px;
     }
-</style>
-<script>
-    $(document).ready(function() {
+</style> -->
+@endpush
 
-        $("#loan_id").select2({
+@section('content')
+<div class="content-wrapper">
+    <div class="container-fluid flex-grow-1 container-p-y">
+        <div class="row">
+            <div class="col-md-12">
+                
+                <div class="card mb-4 overflow-hidden pos-window bg-[#f0f2f5] rounded-3xl shadow-sm border border-gray-100">
+                    <h5 class="card-header bg-white border-b border-gray-100 py-3 px-4 flex justify-between items-center">
+                        <span class="font-bold text-slate-800 text-base">Point of Sale System Terminal</span>
+                        <div class="text-xs text-slate-400 font-medium">Active Session Base Registry</div>
+                    </h5>
+                    
+                    <div class="flex h-[calc(100vh-210px)] overflow-hidden">
+                        
+                        <main class="flex-1 p-6 overflow-y-auto custom-scrollbar">
+                            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                                </div>
+                        </main>
+
+                        <aside class="w-[360px] bg-white border-l border-gray-100 flex flex-col justify-between shadow-sm">
+                            
+                            <div class="p-4 border-b border-gray-50 bg-slate-50/50">
+                                <div class="text-xs text-slate-400 mb-2 font-semibold tracking-wider uppercase">Order Reference: <span id="orderNumber" class="font-bold text-slate-700">#11826</span></div>
+                                
+                                <div class="mb-1">
+                                    <select id="customerSelect" class="select2 form-select cursor-pointer">
+                                        @forelse($customers as $customer)
+                                            <option value="{{ $customer->id }}">{{ $customer->customer_name ?? $customer->name ?? 'Walk-in Customer' }}</option>
+                                        @empty
+                                            <option value="Walk-in Customer">Walk-in Customer</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="cartBody" class="flex-grow overflow-y-auto px-4 py-3 space-y-3 custom-scrollbar">
+                                </div>
+
+                            <div class="p-4 border-t border-gray-100 bg-white">
+                                <div class="flex justify-between items-center mb-4 px-1">
+                                    <span class="text-sm font-semibold text-slate-400 uppercase tracking-wide">Grand Total</span>
+                                    <span id="cartTotal" class="text-2xl font-black text-slate-900">$ 0.00</span>
+                                </div>
+                                
+                                <div class="flex gap-3">
+                                    <button id="receiptBtn" onclick="printReceipt()" class="w-12 h-12 rounded-xl flex items-center justify-center transition bg-slate-100 text-slate-700 hover:bg-slate-200" disabled>
+                                        <i class="fas fa-receipt text-base"></i>
+                                    </button>
+                                    <button id="submitOrderBtn" onclick="submitOrder()" class="flex-1 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-100 py-3.5" disabled>
+                                        <i class="fas fa-cash-register text-xs"></i>
+                                        Submit Order
+                                    </button>
+                                </div>
+                            </div>
+                        </aside>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+@endsection
+
+@push('script')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
+<script type="text/javascript">
+    // Direct database collection translation injection safely mapped
+    const products = @json($products ?? []);
+    let cart = [];
+
+    $(document).ready(function() {
+        // Initialize your default Select2 selector styling mapping direct configurations smoothly
+        $("#customerSelect").select2({
             placeholder: "សូមជ្រើសរើសអតិថិជន",
-            allowClear: true
+            allowClear: false
         });
-        $("#product_id").select2({
-            placeholder: "សូមជ្រើសរើសផលិតផល",
-            allowClear: true
+
+        renderProducts();
+        renderCart();
+        generateOrderNumber();
+    });
+
+    function generateOrderNumber() {
+        const num = Math.floor(10000 + Math.random() * 90000);
+        const el = document.getElementById('orderNumber');
+        if(el) el.innerText = `#${num}`;
+    }
+
+    function renderProducts() {
+        const container = document.getElementById("productsGrid");
+        if (!container) return;
+        container.innerHTML = "";
+
+        if (products.length === 0) {
+            container.innerHTML = `
+                <div class="col-span-full text-center py-12 text-slate-400 font-medium text-sm">
+                    No active products found in the database directory.
+                </div>`;
+            return;
+        }
+
+        products.forEach(product => {
+            let imgSection = '';
+            if (product.image) {
+                imgSection = `
+                    <div class="h-44 bg-neutral-950 flex items-center justify-center overflow-hidden">
+                        <img src="${product.image}" alt="Phone Image" class="w-full h-full object-cover opacity-90 transition duration-300 group-hover:scale-105">
+                    </div>`;
+            } else {
+                imgSection = `
+                    <div class="h-44 bg-gray-50 flex flex-col items-center justify-center p-4 border-b border-gray-100">
+                        <i class="fas fa-camera text-3xl text-gray-300 mb-2"></i>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider text-center">Product Image Coming Soon</span>
+                    </div>`;
+            }
+
+            const price = product.selling_price ? parseFloat(product.selling_price) : 0;
+            const name = product.product_name || "Unknown Model";
+            const imei = product.product_imei || product.imei || "--";
+            const desc = product.note || product.specs || "Original smartphone collection item.";
+
+            const cardHtml = `
+                <div onclick="addToCart(${product.id})" class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:border-blue-200 transition duration-200 flex flex-col cursor-pointer transform active:scale-[0.98]">
+                    ${imgSection}
+                    <div class="p-4 flex-1 flex flex-col justify-between min-h-[110px]">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">
+                                ${name} <span class="text-slate-400 font-medium">[ IMEI: ${imei} ]</span>
+                            </h3>
+                            <p class="text-xs text-slate-400 font-medium mt-1.5 leading-relaxed truncate">${desc}</p>
+                        </div>
+                        <div class="mt-4 text-base font-black text-slate-900">$${price.toFixed(2)}</div>
+                    </div>
+                </div>`;
+            container.innerHTML += cardHtml;
         });
-    })
+    }
+
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        if(!product) return;
+
+        const cartItem = cart.find(item => item.product.id === productId);
+        if (cartItem) {
+            cartItem.quantity += 1;
+        } else {
+            cart.push({ product, quantity: 1 });
+        }
+        renderCart();
+    }
+
+    function changeQuantity(productId, delta) {
+        const index = cart.findIndex(item => item.product.id === productId);
+        if (index !== -1) {
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            renderCart();
+        }
+    }
+
+    function removeFromCart(productId) {
+        cart = cart.filter(item => item.product.id !== productId);
+        renderCart();
+    }
+
+    function renderCart() {
+        const cartBody = document.getElementById("cartBody");
+        const totalDisplay = document.getElementById("cartTotal");
+        const submitBtn = document.getElementById("submitOrderBtn");
+        const receiptBtn = document.getElementById("receiptBtn");
+
+        if(!cartBody) return;
+
+        if (cart.length === 0) {
+            cartBody.innerHTML = `
+                <div class="h-full flex flex-col items-center justify-center text-slate-400 space-y-2 py-12">
+                    <i class="fas fa-shopping-basket text-4xl text-slate-200"></i>
+                    <p class="text-xs font-medium text-slate-400">Cart is empty</p>
+                </div>`;
+            if(totalDisplay) totalDisplay.innerText = "$ 0.00";
+            
+            if(submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.className = "flex-1 bg-[#9aa1b1] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition cursor-not-allowed py-3.5";
+            }
+            if(receiptBtn) {
+                receiptBtn.disabled = true;
+                receiptBtn.className = "w-12 h-12 bg-[#e8ebf3] text-[#9aa1b1] rounded-xl flex items-center justify-center transition cursor-not-allowed";
+            }
+            return;
+        }
+
+        cartBody.innerHTML = "";
+        let totalPrice = 0;
+
+        cart.forEach(item => {
+            const itemPrice = item.product.selling_price ? parseFloat(item.product.selling_price) : 0;
+            totalPrice += (itemPrice * item.quantity);
+
+            const name = item.product.product_name || "Unknown Model";
+            const imei = item.product.product_imei || item.product.imei || "--";
+
+            const cartItemHtml = `
+                <div class="flex items-center justify-between border-b border-gray-100/70 pb-3 mt-1 group bg-white p-2.5 rounded-xl mb-1 shadow-sm border border-gray-50">
+                    <div class="flex-1 min-w-0 pr-2">
+                        <h4 class="text-xs font-bold text-slate-800 truncate">${name}</h4>
+                        <p class="text-[10px] text-slate-400 font-medium">IMEI: ${imei}</p>
+                        <span class="text-xs font-bold text-blue-600">$${itemPrice.toFixed(2)}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="flex items-center bg-slate-50 border border-slate-100 rounded-lg">
+                            <button onclick="changeQuantity(${item.product.id}, -1)" class="px-2 py-1 text-slate-500 hover:bg-slate-200/60 rounded-l-lg transition text-xs font-bold">-</button>
+                            <span class="px-1.5 text-xs font-bold text-slate-700 min-w-[14px] text-center">${item.quantity}</span>
+                            <button onclick="changeQuantity(${item.product.id}, 1)" class="px-2 py-1 text-slate-500 hover:bg-slate-200/60 rounded-r-lg transition text-xs font-bold">+</button>
+                        </div>
+                        <button onclick="removeFromCart(${item.product.id})" class="text-slate-300 hover:text-red-500 p-1 transition">
+                            <i class="fas fa-trash-alt text-xs"></i>
+                        </button>
+                    </div>
+                </div>`;
+            cartBody.innerHTML += cartItemHtml;
+        });
+
+        if(totalDisplay) totalDisplay.innerText = `$ ${totalPrice.toFixed(2)}`;
+        if(submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.className = "flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition cursor-pointer shadow-md shadow-blue-100 py-3.5";
+        }
+        if(receiptBtn) {
+            receiptBtn.disabled = false;
+            receiptBtn.className = "w-12 h-12 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl flex items-center justify-center transition cursor-pointer";
+        }
+    }
+
+    function submitOrder() {
+        const customerSelect = document.getElementById("customerSelect");
+        const customerId = customerSelect ? customerSelect.value : null;
+
+        const payload = {
+            customer_id: customerId,
+            note: "Counter POS Transaction",
+            items: cart.map(item => ({
+                product_id: item.product.id,
+                quantity: item.quantity
+            })),
+            _token: "{{ csrf_token() }}"
+        };
+
+        fetch("{{ route('orders.store', app()->getLocale()) }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(async res => {
+            const data = await res.json();
+            if(!res.ok) throw new Error(data.message || "Failed.");
+            return data;
+        })
+        .then(data => {
+            alert(`Sale successfully saved!\nDatabase Order ID: #${data.order_id}`);
+            cart = [];
+            renderCart();
+            generateOrderNumber();
+        })
+        .catch(err => alert("Error saving transaction details: " + err.message));
+    }
+
+    function printReceipt() {
+        alert("Streaming invoice data to layout processing hardware layers...");
+    }
 </script>
 @endpush
