@@ -240,7 +240,7 @@ class CustomerController extends Controller
             'salary_date' => $request->date_income ?? '',
             'other_income' => $request->other_income ?? 0,
           ];
-          $customer->job->update($customerJobData);
+          customerJob::updateOrCreate(['customer_id' => $customer->id], $customerJobData);
 
           $customerGuarantorData = [
             'id_card_number' => $request->guarantor_id_card_number ?? '',
@@ -262,7 +262,7 @@ class CustomerController extends Controller
             'mobile' => $request->guarantor_mobile ?? '',
             'facebook' => $request->guarantor_facebook ?? '',
           ];
-          $customer->guarantor->update($customerGuarantorData);
+          CustomerGuarantor::updateOrCreate(['customer_id' => $customer->id], $customerGuarantorData);
         }
 
         // Customer::findOrFail($id)->update($customerData);
@@ -275,9 +275,7 @@ class CustomerController extends Controller
      */
     public function destroy(Request $request, string $lang, $id)
     {
-        $request->validate([
-            'confirm' => 'required',
-        ]);
+       
 
         // try {
             Customer::destroy($id);

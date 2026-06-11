@@ -68,7 +68,18 @@
                                 <a href="{{ route('customers.show', withLang(['id' => $customer->id])) }}" class="btn btn-icon btn-outline-secondary">
                                     <span class="tf-icons bx bx-detail"></span>
                                 </a>
+                                <form action="{{ route('customers.destroy', withLang(['id' => $customer->id])) }}"
+                                      method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="btn btn-icon btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete {{ $customer->name }}?')">
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                                </form>
                             </td>
+
 
                             @endcan
                         </tr>
