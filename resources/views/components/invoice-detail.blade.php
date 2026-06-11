@@ -78,7 +78,7 @@
                     </td>
                 </tr>
             </tfoot>
-        </table>
+        </table>a
     </div>
 
     {{-- Note --}}

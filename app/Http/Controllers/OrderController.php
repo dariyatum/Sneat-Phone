@@ -73,8 +73,11 @@ class OrderController extends Controller
     public function create()
     {
         // 1. Fetch products and customers from the database to populate the UI view dropdowns and grids
-        $products = Product::all();
-        $customers = Customer::all();
+       $products = Product::where(
+            'status',
+            Product::STATUS_ID_AVAILABLE
+        )->get();
+                $customers = Customer::all();
 
         // 2. Fetch authenticated user's persistent cart items if necessary
         $cartItems = Cart::with('product')->where('user_id', auth()->id())->get();
@@ -87,9 +90,7 @@ class OrderController extends Controller
         ));
     }
 
-    /**
-     * Store a new created resource in storage
-     */
+    //  Store a new created resource in storage
     public function store(Request $request)
     {
         // Validate request data
@@ -123,15 +124,20 @@ class OrderController extends Controller
 
             // Create order items details records
             foreach ($request->items as $item) {
-                $product = Product::findOrFail($item['product_id']);
 
-                OrderDetail::create([
-                    'order_id'   => $order->id,
-                    'product_id' => $product->id,
-                    'unit_price' => $product->selling_price, 
-                    'updated_at' => now(),
-                    'created_at' => now(),
-                ]);
+            $product = Product::findOrFail($item['product_id']);
+
+            OrderDetail::create([
+                'order_id'   => $order->id,
+                'product_id' => $product->id,
+                'unit_price' => $product->selling_price,
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]);
+
+            // Mark phone as sold
+            $product->status = Product::STATUS_ID_SOLD;
+            $product->save();
             }
 
             // Return success response with redirect path
@@ -144,9 +150,8 @@ class OrderController extends Controller
         });
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+    //   Display the specified resource.   
     public function show(string $lang, Order $order)
     {
         $order = $order->with('orderDetails', 'customer', 'employee')->findOrFail($order->id);
