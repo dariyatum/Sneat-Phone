@@ -78,19 +78,26 @@ class LoanPaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
-      $loanPayment = [];
-      if ($request->loan) {
+   public function create(Request $request)
+{
+    $loanPayment = [];
+    if ($request->loan) {
         $loanPayment = Loan::approved()->with('customer')->findOrfail($request->loan);
-      }
-      $loans = Loan::approved()->with('customer')->get();
-      $currentNow = Carbon::now();
-      $currentDate = $currentNow->format('Y-m-d');
-      $statuOptions = LoanPayment::STATUS;
-      $typOptions = LoanPayment::TYPES;
-      return view('loans.payments.create', compact('loans', 'currentDate', 'statuOptions', 'typOptions', 'loanPayment'));
     }
+    $loans = Loan::approved()->with('customer')->get();
+    $customers = Customer::all(); 
+    $products = Product::whereHas('loans', function($q) {
+    $q->where('status', Loan::STATUS_2); })->get();                
+    $currentNow = Carbon::now();
+    $currentDate = $currentNow->format('Y-m-d');
+    $statuOptions = LoanPayment::STATUS;
+    $typOptions = LoanPayment::TYPES;
+
+    return view('loans.payments.create', compact(
+        'loans', 'currentDate', 'statuOptions', 'typOptions', 
+        'loanPayment', 'customers', 'products'     // ✅ ADD customers & products
+    ));
+}
 
     /**
      * Store a newly created resource in storage.
