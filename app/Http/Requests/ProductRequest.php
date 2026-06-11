@@ -21,7 +21,7 @@ class ProductRequest extends FormRequest
     {
         return [
             'product_name'     => 'required|string|max:255',
-
+            'battery_percentage' => 'nullable|integer|min:0|max:100',
             // IMEI should be 15 digits
             'product_imei'     => 'required|digits:15',
 
@@ -29,11 +29,10 @@ class ProductRequest extends FormRequest
             'series'           => 'required|integer|exists:series,id',
             'color'            => 'required|integer|exists:colors,id',
             'model_type'       => 'required|integer|exists:model_types,id',
-
             'condition'        => 'required|string|max:255',
-
+            'percentage' => 'nullable|integer|min:0|max:100',
             'storage'          => 'required|integer|exists:storages,id',
-
+            'note' => 'nullable|string|max:1000',
             'type_of_machine'  => 'required|string|max:255',
 
             // only required when type_of_machine = 2

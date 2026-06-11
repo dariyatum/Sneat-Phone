@@ -102,7 +102,7 @@ class ProductController extends Controller
       $product->condition = $request->condition;
       $product->storage_id = $request->storage;
       $product->type_of_machine = $request->type_of_machine;
-      $product->network_id = $request->network;
+      $product->network_id = $request->network_id;
       $product->battery_percentage = $request->battery_percentage;
       $product->percentage = $request->percentage;
       $product->purchase_price = $request->purchase_price;
@@ -112,6 +112,7 @@ class ProductController extends Controller
       $product->image = '';
       $product->status = $request->status;
       $product->note = $request->note ?? '';
+  
       $product->save();
       if ($image = $request->file('image')) {
         $destinationPath = 'images/product/';
@@ -120,6 +121,7 @@ class ProductController extends Controller
         $productImage = $formattedNumber. "_" .md5($filename . time()) . "." . $image->getClientOriginalExtension();
         $image->move($destinationPath, $productImage);
         $product->image = $productImage;
+
         $product->save();
       }
 
@@ -216,6 +218,7 @@ public function update(ProductRequest $request, string $lang, Product $product)
         $image->move($destinationPath, $productImage);
 
         $product->image = $productImage;
+        
     }
 
     $product->save();
