@@ -45,7 +45,7 @@ class Order extends Model
 
     public function employee()
     {
-        return $this->hasOne(Employee::class, 'id', 'employee_id');
+        return $this->hasOne(Employee::class, 'user_id', 'employee_id');
     }
 
     public function customer()

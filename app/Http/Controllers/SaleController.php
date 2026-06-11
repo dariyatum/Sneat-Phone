@@ -27,7 +27,7 @@ class SaleController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Order::with('customer');
+        $query = Order::with('customer','employee');
         $customers = Customer::pluck('name', 'id');
         $parameterNames = [];
 

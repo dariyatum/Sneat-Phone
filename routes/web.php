@@ -1,5 +1,5 @@
 <?php
-// MAO SREYPOV
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
@@ -24,6 +24,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\GurantorController;
 use App\Http\Controllers\SaleController;
+use App\Http\Middleware\CheckLogin;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,8 +36,22 @@ use App\Http\Controllers\SaleController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+use Illuminate\Http\Request;
 
+Route::get('/login-test', function () {
+    return view('login-test');
+})->name('login.test');
 
+Route::post('/check-login', function (Request $request) {
+    return redirect()->route('dashboard.test');
+})->middleware('check.login')->name('login.test.check');
+
+Route::get('/dashboard-test', function () {
+    return view('dashboard-test');
+})->name('dashboard.test');
+Route::get('test-middleware', function(){
+    return 'middleware is working';})->name('test')->middleware('check.login'
+);
 
 Auth::routes();
 Route::get('/', HomeController::class)->name('home');
@@ -83,30 +98,30 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
 });
     Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
 
-    Route::get('/', [EmployeeController::class, 'index'])->name('index');
+        Route::get('/', [EmployeeController::class, 'index'])->name('index');
 
-    Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
+        Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
 
-    Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
+        Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
 
-    Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+        Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
 
-    Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])
-        ->name('edit.password');
+        Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])
+            ->name('edit.password');
 
-    Route::post('/password/update/{id}', [EmployeeController::class, 'updatePassword'])
-        ->name('update.password');
+        Route::post('/update/password/{id}', [EmployeeController::class, 'updatePassword'])
+            ->name('update.password');
 
-    Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
+        Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
 
-    Route::post('/profile/update', [UserController::class, 'update'])->name('update.profile');
+        Route::post('/profile/update', [UserController::class, 'update'])->name('update.profile');
 
-    Route::get('/profile/edit/password', [UserController::class, 'editPassword'])
-        ->name('edit.profile.password');
+        Route::get('/profile/edit/password', [UserController::class, 'editPassword'])
+            ->name('edit.profile.password');
 
-    Route::post('/profile/update/password', [UserController::class, 'updatePassword'])
-        ->name('update.profile.password');
-});
+        Route::post('/profile/update/password', [UserController::class, 'updatePassword'])
+            ->name('update.profile.password');
+    });
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
       Route::get('/create', [OrderController::class, 'create'])->name('create');
@@ -206,6 +221,9 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
         Route::get('/', [LoanPaymentController::class, 'index'])->name('index');
         Route::get('/create', [LoanPaymentController::class, 'create'])->name('create');                                                                                                                                                      
         Route::post('/', [LoanPaymentController::class, 'store'])->name('store');
+        
+        Route::get('/late', [LoanPaymentController::class, 'late'])->name('late');
+
         Route::get('/{loanPayment}/edit', [LoanPaymentController::class, 'edit'])->name('edit');
         Route::get('/{loanPayment}/invoice', [LoanPaymentController::class, 'invoice'])->name('invoice');
         Route::get('/{loanPayment}/invoice/pdf', [LoanPaymentController::class, 'invoicePdf'])->name('invoice.pdf');
@@ -251,10 +269,14 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
 // for sidebar
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 
-// for order
-Route::get('{lang}/orders/create', [OrderController::class, 'create'])->name('orders.create');
 
-// Used to send new data securely to the server
+// for order
+Route::get('{lang}/orders/create', [OrderController::class, 'create'])
+    ->name('orders.create');
+
+Route::get('{lang}/orders/create', [OrderController::class, 'create'])
+    ->name('orders.create');
+
 Route::post('/orders/store', [OrderController::class, 'store']) ->name('orders.store');
 
 

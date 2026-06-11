@@ -12,32 +12,17 @@ use Carbon\Carbon;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('permission:report-list', ['only' => ['index','report']]);
     }
 
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
     public function __invoke(Request $request)
     {
         return redirect()->route('dashboard', $request->cookie('locale') ?? app()->getLocale());
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index(Request $request)
     {
       $currentYear = date('Y');
@@ -62,11 +47,13 @@ class HomeController extends Controller
 
       if ($getRevenue['monthlyDifferenceLastYear']['total'] != 0) {
         $percentageChange = (($getRevenue['monthlyDifference']['total'] - $getRevenue['monthlyDifferenceLastYear']['total']) / $getRevenue['monthlyDifferenceLastYear']['total']) * 100;
-      } else {$percentageChange = 0;
+      } else {
+        $percentageChange = 0;
       }
+
       $orders = Order::limit(5)->orderBy('order_date', 'desc')->get();
-      $loanPayments = [];
-      $loans = 0;
+      $loanPayments = LoanPayment::with('loan.customer')->orderBy('created_at', 'desc')->limit(5)->get();
+      $loans = Loan::with('customer')->latest()->limit(5)->get(); // FIXED
       $lateLoans = Loan::has('customer')->with('customer')->latePayment()->limit(5)->orderBy('next_payment_date', 'desc')->get();
 
       return view('home', [
