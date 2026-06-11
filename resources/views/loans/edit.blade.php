@@ -84,16 +84,21 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="mb-3 col-md-6">
-                              <label class="form-label" for="first_amount">{{__('loan.first_amount')}}</label>
+                           <div class="mb-3 col-md-6">
+                                <label class="form-label" for="first_amount">{{__('loan.first_amount')}}</label>
                                 <div class="input-group input-group-merge">
-                                  <input @if($amountUpdate) disabled @endif class="form-control @error('first_amount') is-invalid @enderror" type="text" value="{{ old('first_amount', $loan->first_amount) }}" id="first_amount" name="first_amount"/>
-                                  <span class="input-group-text">$</span>
-                                  @error('first_amount')
-                                      <span class="invalid-feedback" role="alert">
-                                          <strong>{{ $message }}</strong>
-                                      </span>
-                                  @enderror
+                                    <input @if($amountUpdate) readonly @endif 
+                                        class="form-control @error('first_amount') is-invalid @enderror" 
+                                        type="text" 
+                                        value="{{ old('first_amount', $loan->first_amount) }}" 
+                                        id="first_amount" 
+                                        name="first_amount"/>
+                                    <span class="input-group-text">$</span>
+                                    @error('first_amount')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -153,7 +158,7 @@
 
                             <div class="mb-3 col-md-6">
                               <label class="form-label" for="next_payment_date">{{__('loan.payment.next_payment')}}</label>
-                              <input class="form-control @error('next_payment_date') is-invalid @enderror" type="date" value="{{ old('next_payment_date', $loan->next_payment_date) }}" id="next_payment_date" name="next_payment_date" readonly/>
+                              <input class="form-control @error('next_payment_date') is-invalid @enderror"  type="date"   value="{{ old('next_payment_date', $loan->next_payment_date) }}"   id="next_payment_date"   name="next_payment_date"/>
                               @error('next_payment_date')
                                   <span class="invalid-feedback" role="alert">
                                       <strong>{{ $message }}</strong>

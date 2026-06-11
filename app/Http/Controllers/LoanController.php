@@ -131,13 +131,18 @@ class LoanController extends Controller
           'guarantor_other' => $request->guarantor_other,
         ];
 
-        $data['note'] = $request->note;
-        $data['remain'] = $request->payable_amount;
-        $data['interest_remain'] = $request->duration * $request->amount_interest;
-        $nextPaymentDate = date('Y-m-d', strtotime($request->date . ' +1 month'));
-        $data['next_payment_date'] = $nextPaymentDate;
-        $loan = Loan::create($data);  // line 110
-      //  HERE IS BUG
+        
+      $data['note'] = $request->note;
+      $data['remain'] = $request->payable_amount;
+      $data['interest_remain'] = $request->duration * $request->amount_interest;
+      $nextPaymentDate = date('Y-m-d', strtotime($request->date . ' +1 month'));
+      $data['next_payment_date'] = $nextPaymentDate;
+
+      // ✅ Step 1 — Create the loan
+      $loan = Loan::create($data);
+
+      // ✅ Step 2 — Generate repayment schedule
+      $this->generateLoanPayments($loan);  // ← $this-> not Loan::   //  HERE IS BUG
         // $purchasedPrice = $loan->product->purchase_price;  // line 111
 
         // $soldPrice = $loan->product->selling_price;         // line 112
@@ -153,7 +158,7 @@ class LoanController extends Controller
           $loan->file = $zipFileName;
           $loan->save();
         }
-        $loan->product->update(['status' => Product::STATUS_ID_SOLD]);
+      $loan->product->update(['status' => Product::STATUS_ID_SOLD]);
         $loan->document()->create(
           $loanDocumentData
         );
@@ -360,4 +365,24 @@ class LoanController extends Controller
       $currentDate = $currentNow->format('Y-m-d');
       return view('loans.agreement', compact('loan', 'customers', 'availableProducts', 'statusOptions', 'currentDate', 'payments'));
     }
+    private function generateLoanPayments(Loan $loan)
+{
+    $monthlyAmount = $loan->amount_principal + $loan->amount_interest;
+    $remain = $loan->payable_amount;
+
+    for ($i = 1; $i <= $loan->duration; $i++) {
+        $remain -= $monthlyAmount;
+
+        LoanPayment::create([
+            'loan_id'        => $loan->id,
+            'employee_id'    => Auth::user()->id,
+            'amount'         => $monthlyAmount,
+            'payment_status' => 1,           // 1 = Monthly
+            'payment_type'   => 1,           // 1 = CASH (default)
+            'date'           => Carbon::parse($loan->date)->addMonths($i),
+            'remain'         => max($remain, 0),
+            'note'           => null,
+        ]);
+    }
+}
 }
