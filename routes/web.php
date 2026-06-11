@@ -24,6 +24,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\GurantorController;
 use App\Http\Controllers\SaleController;
+use App\Http\Middleware\CheckLogin;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,8 +36,22 @@ use App\Http\Controllers\SaleController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+use Illuminate\Http\Request;
 
+Route::get('/login-test', function () {
+    return view('login-test');
+})->name('login.test');
 
+Route::post('/check-login', function (Request $request) {
+    return redirect()->route('dashboard.test');
+})->middleware('check.login')->name('login.test.check');
+
+Route::get('/dashboard-test', function () {
+    return view('dashboard-test');
+})->name('dashboard.test');
+Route::get('test-middleware', function(){
+    return 'middleware is working';})->name('test')->middleware('check.login'
+);
 
 Auth::routes();
 Route::get('/', HomeController::class)->name('home');
