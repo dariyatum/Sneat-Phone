@@ -208,23 +208,7 @@
                         @endforelse
 
                   </tbody>
-                  <tfoot class="table-border-bottom-0">
-                      <tr>
-                          <th></th>
-                          <th>{{__('product.name')}}</th>
-                          <th>{{__('product.imei')}}</th>
-                          <th>{{__('product.series')}}</th>
-                          <th>{{__('product.color')}}</th>
-                          <th>{{__('product.model')}}</th>
-                          <th>{{__('product.storage')}}</th>
-                          <th>{{__('product.condition.title')}}</th>
-                          <th>{{__('product.machine')}}</th>
-                          <th>{{__('product.status')}}</th>
-                          @can(['product-list'],['product-edit'], ['product-delete'], ['order-creat'])
-                          <th>Actions</th>
-                          @endcan
-                      </tr>
-                  </tfoot>
+                 
               </table>
               <div class="pagination">
                   {!! $products->withQueryString()->appends(request()->except('page'))->links('pagination::bootstrap-5') !!}

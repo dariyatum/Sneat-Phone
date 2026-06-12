@@ -38,9 +38,7 @@ class UserController extends Controller
     {
         $user = User::findOrfail(Auth::id());
         $request->validate([
-            'position' => 'required',
-            'name' => 'required',
-            'latin_name' => 'required',
+            'posi       ame' => 'required',
             'phone' => 'required',
             'position' => 'required',
             'gender' => 'required|in:1,2,3',
@@ -89,8 +87,9 @@ class UserController extends Controller
 
     public function updatePassword(Request $request)
     {
-        $request->validate([
-            'new_password' => 'required|confirmed',
+       $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8|confirmed',
         ]);
         $user = User::findOrfail(Auth::id());
         if (Hash::check($request->current_password, $user->password)) {
