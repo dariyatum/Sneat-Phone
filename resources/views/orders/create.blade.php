@@ -303,7 +303,7 @@
                                     class="px-2 py-1 text-slate-500 hover:bg-slate-200/60 rounded-r-lg transition text-xs font-bold">+</button>
                         </div>
                         <button onclick="removeFromCart(${item.product.id})"
-                                class="text-slate-300 hover:text-red-500 p-1 transition">
+                            class="text-slate-300 hover:text-red-500 p-1 transition">
                             <i class="fas fa-trash-alt text-xs"></i>
                         </button>
                     </div>

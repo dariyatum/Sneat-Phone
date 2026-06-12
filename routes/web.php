@@ -268,15 +268,9 @@ Route::group(['prefix'=>'products', 'as'=>'products.'], function(){
 
 // for sidebar
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-
-
 // for order
-Route::get('{lang}/orders/create', [OrderController::class, 'create'])
-    ->name('orders.create');
-
-Route::get('{lang}/orders/create', [OrderController::class, 'create'])
-    ->name('orders.create');
-
+Route::get('{lang}/orders/create', [OrderController::class, 'create'])->name('orders.create');
+// for store new order
 Route::post('/orders/store', [OrderController::class, 'store']) ->name('orders.store');
 
 

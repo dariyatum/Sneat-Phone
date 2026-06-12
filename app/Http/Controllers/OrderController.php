@@ -78,16 +78,12 @@ class OrderController extends Controller
             Product::STATUS_ID_AVAILABLE
         )->get();
                 $customers = Customer::all();
-
-        // 2. Fetch authenticated user's persistent cart items if necessary
-        $cartItems = Cart::with('product')->where('user_id', auth()->id())->get();
-
-        // 3. Return view matching structure with all required variables passed safely
-        return view('orders.create', compact(
-            'products',
-            'customers',
-            'cartItems'
-        ));
+                $cartItems = Cart::with('product')->where('user_id', auth()->id())->get();
+                return view('orders.create', compact(
+                    'products',
+                    'customers',
+                    'cartItems'
+         ));
     }
 
     //  Store a new created resource in storage
@@ -180,15 +176,12 @@ class OrderController extends Controller
     {
         // FIX: Restore product status back to available (1) before deleting
         $orderDetails = OrderDetail::where('order_id', $order->id)->get();
-
         foreach ($orderDetails as $detail) {
             Product::where('id', $detail->product_id)->update(['status' => Product::STATUS_ID_AVAILABLE]);
             $detail->delete();
         }
-
         // FIX: Actually delete the order
         $order->delete();
-
         return redirect()->route('sales.index', app()->getLocale())->with('success', 'Sale deleted successfully');
     }
 
