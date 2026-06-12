@@ -70,20 +70,7 @@
                   @endforelse
 
               </tbody>
-              <tfoot class="table-border-bottom-0">
-                  <tr>
-                      <th>{{__('order.number')}}</th>
-                      <th>{{__('order.customer')}}</th>
-                      <th>{{__('order.amount')}}</th>
-                      <th>{{__('order.payment_status')}}</th>
-                      <th>{{__('order.payment_type')}}</th>
-                      <th>{{__('order.sale_by')}}</th>
-                      <th>{{__('order.sale_date')}}</th>
-                      @can(['product-list'],['product-edit'], ['product-delete'], ['order-creat'])
-                       <th>Actions</th>
-                      @endcan
-                  </tr>
-              </tfoot>
+
           </table>
           <div class="pagination">
               {!! $orders->withQueryString()->appends(request()->except('page'))->links('pagination::bootstrap-5') !!}
