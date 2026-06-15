@@ -118,9 +118,9 @@ class EmployeeController extends Controller
      */
     public function destroy(Request $request, string $lang, $id)
     {
-        $request->validate([
-            'confirm' => 'required',
-        ]);
+        // $request->validate([
+        //     'confirm' => 'required',
+        // ]);
         // Find the User by ID
         // $user = User::findOrFail($id);
 

@@ -224,7 +224,4 @@
 
 </style>
 
-@endsection
-
-</style>
 

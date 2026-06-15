@@ -44,6 +44,16 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $model_type->id }}" data-value="{{ $model_type->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+                            <form action="{{ route('model_type.destroy', withLang(['model_type' => $model_type->id])) }}"
+                            method="POST"
+                            class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-icon btn-outline-danger"
+                                    onclick="return confirm('Are you sure?')">
+                                <span class="tf-icons bx bx-trash"></span>
+                            </button>
+                        </form>
                         </td>
                     </tr>
                     @endforeach

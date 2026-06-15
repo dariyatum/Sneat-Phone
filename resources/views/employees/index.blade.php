@@ -58,25 +58,23 @@
                                     <a href="{{ route('users.edit', withLang(['id' => $user->id])) }}" class="btn btn-icon btn-outline-secondary">
                                         <span class="tf-icons bx bx-edit-alt"></span>
                                     </a>
+                                    <form action="{{ route('users.destroy', withLang(['id' => $user->id])) }}"
+                                      method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="btn btn-icon btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete {{ $user->name }}?')">
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                                </form>
                             </td>
                             @endcan
                         </tr>
                     @endforeach
 
                 </tbody>
-                <tfoot class="table-border-bottom-0">
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Branch</th>
-                        <th>Position</th>
-                        @can(['user-edit'])
-                        <th>Actions</th>
-                        @endcan
-                    </tr>
-                </tfoot>
+
             </table>
         </div>
     </div>
